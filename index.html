@@ -1,0 +1,1992 @@
+<!doctype html>
+<html lang="ru" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PPC Track — курс по performance-маркетингу</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1F2EE; --surface:#FFFFFF; --surface2:#E8EAE4; --surface3:#DFE2DA;
+  --ink:#191E1B; --ink2:#4B544F; --ink3:#7E8882;
+  --line:#D2D7CE; --line2:#BDC4B9;
+  --accent:#2F6F5E; --accentInk:#FFFFFF; --accentSoft:#DBE9E3;
+  --term:#8A6318; --termSoft:#F4E9D2;
+  --ok:#2C7A4C; --okSoft:#DCEEE1;
+  --no:#A63A29; --noSoft:#F6E1DC;
+  --shadow:0 1px 0 rgba(25,30,27,.06), 0 8px 24px -16px rgba(25,30,27,.35);
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131817; --surface:#1A211E; --surface2:#222A27; --surface3:#2B3531;
+    --ink:#E8EBE6; --ink2:#A7B1AB; --ink3:#77827C;
+    --line:#2D3733; --line2:#3A4540;
+    --accent:#5FA890; --accentInk:#0F1614; --accentSoft:#1D2C27;
+    --term:#D6A852; --termSoft:#2A2418;
+    --ok:#62B182; --okSoft:#1A2A20;
+    --no:#D7705C; --noSoft:#2B1C19;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 8px 24px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131817; --surface:#1A211E; --surface2:#222A27; --surface3:#2B3531;
+  --ink:#E8EBE6; --ink2:#A7B1AB; --ink3:#77827C;
+  --line:#2D3733; --line2:#3A4540;
+  --accent:#5FA890; --accentInk:#0F1614; --accentSoft:#1D2C27;
+  --term:#D6A852; --termSoft:#2A2418;
+  --ok:#62B182; --okSoft:#1A2A20;
+  --no:#D7705C; --noSoft:#2B1C19;
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 8px 24px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Golos Text", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size:16px; line-height:1.6; -webkit-text-size-adjust:100%;
+}
+code, .mono, .num{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:288px 1fr;min-height:100vh}
+.rail{
+  border-right:1px solid var(--line); background:var(--surface);
+  padding:20px 16px 40px; position:sticky; top:0; height:100vh; overflow-y:auto;
+}
+.main{padding:28px 32px 96px; max-width:820px}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:16px}
+  .main{padding:20px 18px 80px}
+}
+
+/* ---------- rail ---------- */
+.brand{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+.brand b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brand span{font-size:11px;color:var(--ink3)}
+.railmeta{font-size:12.5px;color:var(--ink2);margin-bottom:18px}
+.gauge{height:6px;background:var(--surface3);border-radius:99px;overflow:hidden;margin:10px 0 6px}
+.gauge i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .3s}
+.railnav{display:flex;flex-direction:column;gap:2px;margin-bottom:18px}
+.navbtn{
+  display:flex;align-items:center;gap:9px;width:100%;text-align:left;
+  background:none;border:0;padding:7px 9px;border-radius:8px;font-size:14px;color:var(--ink2)
+}
+.navbtn:hover{background:var(--surface2)}
+.navbtn[aria-current="true"]{background:var(--accentSoft);color:var(--ink);font-weight:600}
+.railhead{font-size:11.5px;color:var(--ink3);margin:14px 0 7px;font-weight:600}
+
+.modlist{display:flex;flex-direction:column;gap:3px}
+.modrow{
+  display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:9px;
+  background:none;border:0;padding:8px 9px;border-radius:8px;text-align:left;width:100%;
+}
+.modrow:hover:not(:disabled){background:var(--surface2)}
+.modrow:disabled{opacity:.42;cursor:not-allowed}
+.modrow[aria-current="true"]{background:var(--accentSoft)}
+.modrow .mn{
+  font-family:"JetBrains Mono",monospace;font-size:11px;width:22px;height:22px;
+  display:grid;place-items:center;border-radius:6px;border:1px solid var(--line2);color:var(--ink3)
+}
+.modrow.done .mn{background:var(--ok);border-color:var(--ok);color:#fff}
+.modrow.active .mn{border-color:var(--accent);color:var(--accent);font-weight:700}
+.modrow .mt{font-size:13.5px;line-height:1.35;color:var(--ink)}
+.modrow.done .mt{color:var(--ink2);text-decoration:line-through;text-decoration-color:var(--line2)}
+.modrow:disabled .mt{text-decoration:none}
+.modrow .mp{font-size:11px;color:var(--ink3);font-family:"JetBrains Mono",monospace}
+
+/* ---------- generic ---------- */
+h1{font-size:30px;line-height:1.18;letter-spacing:-.022em;margin:0 0 10px;font-weight:700}
+h2{font-size:21px;line-height:1.28;letter-spacing:-.015em;margin:32px 0 10px;font-weight:600}
+h3{font-size:16.5px;margin:22px 0 8px;font-weight:600}
+p{margin:0 0 13px;max-width:70ch}
+.lead{font-size:17px;color:var(--ink2);max-width:66ch}
+.crumb{font-size:12.5px;color:var(--ink3);margin-bottom:12px;font-family:"JetBrains Mono",monospace}
+.btn{
+  background:var(--accent);color:var(--accentInk);border:0;padding:10px 18px;
+  border-radius:var(--r);font-weight:600;font-size:14.5px
+}
+.btn:hover{filter:brightness(1.07)}
+.btn:disabled{opacity:.4;cursor:not-allowed;filter:none}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line2)}
+.btn.ghost:hover{background:var(--surface2);filter:none}
+.btn.sm{padding:7px 13px;font-size:13.5px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sep{height:1px;background:var(--line);margin:28px 0}
+
+/* ---------- content blocks ---------- */
+.term{
+  border-left:3px solid var(--term);background:var(--termSoft);
+  padding:11px 14px;border-radius:0 var(--r) var(--r) 0;margin:0 0 13px
+}
+.term b{font-family:"JetBrains Mono",monospace;font-size:14.5px;font-weight:700;color:var(--term)}
+.term .ru{font-size:14px;color:var(--ink2)}
+.term p{margin:5px 0 0;font-size:14.5px}
+.formula{
+  background:var(--surface2);border:1px solid var(--line);border-radius:var(--r);
+  padding:12px 14px;margin:0 0 13px;font-family:"JetBrains Mono",monospace;font-size:14.5px
+}
+.formula .note{font-family:"Golos Text",sans-serif;font-size:13.5px;color:var(--ink2);margin-top:6px}
+.ex{border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;margin:0 0 13px;background:var(--surface)}
+.ex h4{margin:0 0 6px;font-size:14px;font-weight:600;color:var(--accent)}
+.ex p{margin:0 0 6px;font-size:14.5px}
+.ex p:last-child{margin:0}
+.warn{border-left:3px solid var(--no);background:var(--noSoft);padding:11px 14px;border-radius:0 var(--r) var(--r) 0;margin:0 0 13px;font-size:14.5px}
+.warn p{margin:0}
+ul.blist{margin:0 0 13px;padding-left:20px;max-width:70ch}
+ul.blist li{margin-bottom:5px}
+table.btab{border-collapse:collapse;width:100%;margin:0 0 15px;font-size:14px}
+table.btab th,table.btab td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+table.btab th{background:var(--surface2);font-weight:600;font-size:13px}
+.wrapscroll{overflow-x:auto;margin-bottom:15px}
+code{background:var(--surface2);padding:1px 5px;border-radius:5px;font-size:.9em}
+
+/* ---------- quiz ---------- */
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow)}
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.qcount{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--ink3)}
+.qbar{height:4px;background:var(--surface3);border-radius:99px;overflow:hidden;flex:1;max-width:180px}
+.qbar i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.qtext{font-size:17px;line-height:1.45;margin:0 0 16px;font-weight:500}
+.qtag{display:inline-block;font-size:11px;font-family:"JetBrains Mono",monospace;color:var(--ink3);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.opt{
+  display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start;
+  border:1px solid var(--line);background:var(--surface);border-radius:var(--r);
+  padding:11px 13px;text-align:left;width:100%;font-size:15px;line-height:1.45
+}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt .mk{
+  width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line2);
+  display:grid;place-items:center;font-size:12px;font-family:"JetBrains Mono",monospace;color:var(--ink3)
+}
+.opt.multi .mk{border-radius:6px}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accentSoft)}
+.opt[aria-pressed="true"] .mk{border-color:var(--accent);background:var(--accent);color:var(--accentInk)}
+.opt.right{border-color:var(--ok);background:var(--okSoft)}
+.opt.right .mk{border-color:var(--ok);background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--no);background:var(--noSoft)}
+.opt.wrong .mk{border-color:var(--no);background:var(--no);color:#fff}
+.opt .why{display:block;font-size:13.5px;color:var(--ink2);margin-top:5px}
+.numin{
+  font-family:"JetBrains Mono",monospace;font-size:17px;padding:10px 12px;
+  border:1px solid var(--line2);border-radius:var(--r);background:var(--surface);color:var(--ink);width:170px
+}
+.numwrap{display:flex;align-items:center;gap:9px;margin-bottom:16px}
+.numwrap .unit{font-family:"JetBrains Mono",monospace;color:var(--ink2);font-size:15px}
+.verdict{border-radius:var(--r);padding:12px 14px;margin-bottom:14px;font-size:14.5px}
+.verdict.good{background:var(--okSoft);border-left:3px solid var(--ok)}
+.verdict.bad{background:var(--noSoft);border-left:3px solid var(--no)}
+.verdict b{display:block;margin-bottom:3px}
+.hintbox{font-size:14px;color:var(--ink2);background:var(--surface2);border-radius:var(--r);padding:10px 13px;margin-bottom:14px}
+
+/* ---------- misc ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:12px;margin:22px 0 10px}
+.stat{border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;background:var(--surface)}
+.stat .v{font-family:"JetBrains Mono",monospace;font-size:24px;font-weight:700;line-height:1.1}
+.stat .l{font-size:12.5px;color:var(--ink3);margin-top:3px}
+.lessonlist{display:flex;flex-direction:column;gap:8px;margin:18px 0}
+.lrow{
+  display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:var(--surface);
+  text-align:left;width:100%
+}
+.lrow:hover{border-color:var(--accent)}
+.lrow .lm{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line2);display:grid;place-items:center;font-size:12px;font-family:"JetBrains Mono",monospace;color:var(--ink3)}
+.lrow.done .lm{background:var(--ok);border-color:var(--ok);color:#fff}
+.lrow .lt{font-size:15px;font-weight:500}
+.lrow .ls{font-size:12.5px;color:var(--ink3);margin-top:2px}
+.lrow .lsc{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--ink3)}
+.lrow.done .lt{color:var(--ink2)}
+.badge{display:inline-block;font-size:11.5px;font-family:"JetBrains Mono",monospace;padding:2px 7px;border-radius:5px;background:var(--surface2);color:var(--ink2);border:1px solid var(--line)}
+.badge.ok{background:var(--okSoft);color:var(--ok);border-color:transparent}
+.badge.lock{background:var(--surface2);color:var(--ink3)}
+.glosssearch{width:100%;max-width:340px;padding:10px 13px;border:1px solid var(--line2);border-radius:var(--r);background:var(--surface);color:var(--ink);font-size:15px;margin-bottom:18px}
+.gitem{border-bottom:1px solid var(--line);padding:11px 0}
+.gitem b{font-family:"JetBrains Mono",monospace;color:var(--term);font-size:15px}
+.gitem .gr{color:var(--ink2);font-size:14px}
+.gitem p{margin:4px 0 0;font-size:14.5px}
+.gitem .gsrc{font-size:12px;color:var(--ink3);margin-top:4px}
+textarea.codebox{
+  width:100%;height:110px;font-family:"JetBrains Mono",monospace;font-size:12px;
+  border:1px solid var(--line2);border-radius:var(--r);padding:10px;background:var(--surface2);color:var(--ink);resize:vertical
+}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%);
+  background:var(--ink);color:var(--paper);padding:11px 18px;border-radius:99px;font-size:14px;z-index:50
+}
+.empty{color:var(--ink2);font-size:15px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="brand"><b>PPC Track</b><span class="mono">v1.0</span></div>
+    <div class="railmeta">Google Ads · Meta Ads · Email</div>
+    <div class="gauge"><i id="gauge" style="width:0%"></i></div>
+    <div class="railmeta mono" id="gaugeTxt">0% пройдено</div>
+
+    <div class="railnav">
+      <button class="navbtn" data-nav="home">Карта курса</button>
+      <button class="navbtn" data-nav="glossary">Словарь терминов</button>
+      <button class="navbtn" data-nav="progress">Прогресс и перенос</button>
+    </div>
+
+    <div class="railhead">Модули</div>
+    <div class="modlist" id="modlist"></div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+const COURSE = {
+modules: [
+
+/* ══════════════════ M0 ══════════════════ */
+{
+id:"m0", num:0, title:"Фундамент: деньги и метрики", subtitle:"Язык, на котором говорят в аккаунте", duration:"1,5 дня", pass:80,
+intro:"Всё остальное в курсе стоит на этом модуле. Через все уроки проходит один сквозной кейс — компания BrightFix, ремонт бытовой техники в Чикаго. На её цифрах разбирается каждая формула, поэтому метрики не остаются абстракцией.",
+lessons:[
+
+{ id:"m0l1", title:"Что ты на самом деле покупаешь", blocks:[
+{t:"p", x:"Начнём с честного описания сделки. Рекламная платформа не продаёт тебе клиентов и не продаёт продажи. Она продаёт <b>возможность показаться человеку в конкретный момент</b>. Всё, что происходит дальше — перейдёт ли он, понравится ли ему страница, купит ли он — это уже твоя зона ответственности, и платформа за это не отвечает."},
+{t:"p", x:"Из этого следует главный принцип профессии: <b>плохой продукт, плохой оффер или плохая страница не чинятся рекламой</b>. Реклама умеет только увеличивать количество людей, которые их увидят. Если конверсия страницы 0,3%, увеличение бюджета вдвое просто удвоит расход."},
+
+{t:"h", x:"Сквозной кейс: BrightFix"},
+{t:"ex", title:"Знакомство с клиентом", body:[
+"<b>BrightFix Appliance Repair</b> — сервис ремонта бытовой техники в Чикаго. Восемь выездных мастеров, работают по городу и ближним пригородам.",
+"Как зарабатывают: клиент оставляет заявку или звонит, диспетчер согласует время, мастер выезжает, чинит на месте. Средний чек ремонта — <b>$180</b>. Валовая маржа после запчастей, топлива и оплаты мастера — <b>45%</b>, то есть <b>$81</b> с заказа.",
+"Что уже есть: сайт с формой и телефоном, страница «Ремонт холодильников», страница «Ремонт стиральных машин», общая страница «Услуги».",
+"Чего нет: аналитики, трекинга звонков, понимания, откуда идут заявки. Реклама крутилась полгода силами владельца, отчётов никто не смотрел.",
+"Твоя задача как нового специалиста — разобраться, что происходит, и сделать канал управляемым. Это буквально типовая ситуация первого клиента."
+]},
+
+{t:"h", x:"Единицы измерения верха воронки"},
+{t:"term", en:"Impression", ru:"показ", d:"Один случай, когда объявление было выведено на экран. Не означает, что человек его заметил, и тем более не означает, что он один. Показ — это единица инвентаря, который платформа продаёт."},
+{t:"term", en:"Reach", ru:"охват", d:"Количество уникальных людей, увидевших объявление хотя бы раз. Охват всегда меньше или равен показам."},
+{t:"term", en:"Frequency", ru:"частота", d:"Сколько раз в среднем один человек увидел объявление. Считается как показы, делённые на охват. Метрика здоровья креатива: когда частота растёт, а результат падает, аудитория устала."},
+{t:"f", x:"Frequency = impressions / reach", note:"36 000 показов на 12 000 человек → частота 3,0"},
+{t:"p", x:"В поисковой рекламе частота почти не используется: люди приходят по запросу, а не потому что ты их догнал. В Meta это одна из главных диагностических метрик, потому что там объявление показывается людям, которые тебя не искали."},
+
+{t:"h", x:"Три формулы, которые надо знать наизусть"},
+{t:"term", en:"CTR — click-through rate", ru:"кликабельность", d:"Доля показов, превратившихся в клики. Отвечает на вопрос, попадает ли объявление в аудиторию и в её задачу."},
+{t:"f", x:"CTR = clicks / impressions × 100%"},
+{t:"term", en:"CPC — cost per click", ru:"цена клика", d:"Средняя стоимость одного перехода. Зависит от конкуренции в нише, от качества объявления и от того, насколько запрос близок к покупке."},
+{t:"f", x:"CPC = spend / clicks"},
+{t:"term", en:"CPM — cost per mille", ru:"цена тысячи показов", d:"Сколько стоит купить тысячу показов. Базовая валюта в Meta: там ты по сути покупаешь показы, а количество кликов из них зависит от креатива."},
+{t:"f", x:"CPM = spend / impressions × 1000"},
+
+{t:"h", x:"Как эти три метрики связаны"},
+{t:"p", x:"Это не три независимых числа, а одна система. Платформа продаёт показы, а цену клика ты получаешь как производную от того, насколько хорошо эти показы отрабатывают."},
+{t:"f", x:"CPC = CPM / (CTR × 1000)", note:"CPM $8 и CTR 1,6% → CPC = 8 / 16 = $0,50"},
+{t:"p", x:"Практический вывод, который стоит усвоить прямо сейчас: <b>улучшив CTR вдвое, ты вдвое удешевляешь клик</b>, не трогая ни ставки, ни бюджет. В Meta главный рычаг для этого — креатив. В поиске — релевантность объявления запросу."},
+
+{t:"ex", title:"Считаем BrightFix, первый месяц", body:[
+"Данные за месяц по поисковой кампании: расход <b>$2 400</b>, показов <b>60 000</b>, кликов <b>1 500</b>.",
+"CTR = 1 500 / 60 000 = <b>2,5%</b>",
+"CPC = 2 400 / 1 500 = <b>$1,60</b>",
+"CPM = 2 400 / 60 000 × 1000 = <b>$40</b>",
+"Проверим связь: 40 / (0,025 × 1000) = 40 / 25 = $1,60. Сходится.",
+"Что из этого видно уже сейчас: CPM $40 — высокий, но для поиска это нормально, там покупается горячий трафик. Что нельзя сказать по этим цифрам: приносит ли кампания деньги. Для этого нужен следующий урок."
+]},
+
+{t:"h", x:"Метрики тщеславия"},
+{t:"warn", x:"Показы, охват и CTR сами по себе не являются целями. Заголовок «Ремонт техники бесплатно» соберёт рекордный CTR и ни одного заказа. Эти метрики — диагностические: они объясняют, <b>почему</b> получился тот или иной результат, но не являются результатом."},
+{t:"p", x:"Хорошее правило для отчётов: метрики выше клика идут в раздел «что происходит внутри», метрики ниже клика — в раздел «что получил бизнес». Владельцу BrightFix интересна вторая часть, тебе для работы нужны обе."},
+
+{t:"h", x:"Что спрашивают на собеседовании"},
+{t:"ul", items:[
+"«CTR вырос, а конверсий стало меньше. Что случилось?» — скорее всего объявление стало привлекать более широкую и менее целевую аудиторию",
+"«CPC вырос на 30% за месяц, что делать?» — сначала проверить, не изменился ли состав запросов и не зашёл ли новый конкурент в аукцион; повышение ставок это следствие, а не причина",
+"«Чем CPM отличается от CPC» — базовый отсев, но спрашивают почти всегда"
+]}
+], quiz:[
+{id:"q001", type:"num", q:"Кампания получила 48 000 показов и 1 200 кликов. Какой CTR в процентах?", unit:"%", answer:2.5, tol:0.05, hint:"CTR = клики делить на показы, умножить на 100.", explain:"1 200 / 48 000 = 0,025, то есть 2,5%."},
+{id:"q002", type:"num", q:"Потрачено $840, получено 350 кликов. Чему равен CPC?", unit:"$", answer:2.4, tol:0.02, hint:"Расход делить на клики.", explain:"840 / 350 = $2,40 за клик."},
+{id:"q003", type:"num", q:"Потрачено $270 на 45 000 показов. Чему равен CPM?", unit:"$", answer:6, tol:0.05, hint:"CPM считается на тысячу показов, а не на один.", explain:"270 / 45 000 × 1000 = $6,00 за тысячу показов."},
+{id:"q004", type:"single", q:"CPM держится на $10, а CTR вырос с 1% до 2%. Что произошло с CPC?", options:[
+ {t:"Упал вдвое", ok:true, why:"За те же $10 ты теперь получаешь 20 кликов вместо 10."},
+ {t:"Вырос вдвое", why:"Наоборот: больше кликов за ту же цену показов означает более дешёвый клик."},
+ {t:"Не изменился", why:"CPC напрямую зависит от CTR при фиксированном CPM."},
+ {t:"Зависит от бюджета", why:"Бюджет определяет объём, а не цену клика."}
+], explain:"CPC = CPM / (CTR × 1000). При CPM $10 и CTR 1% клик стоит $1,00; при CTR 2% — $0,50."},
+{id:"q005", type:"num", q:"Meta-кампания BrightFix: охват 9 000 человек, показов 40 500. Чему равна частота?", unit:"", answer:4.5, tol:0.05, hint:"Показы делить на охват.", explain:"40 500 / 9 000 = 4,5. Высоковато для короткого периода — вероятно, аудитория узкая и креатив скоро выгорит."},
+{id:"q006", type:"tf", q:"Верно ли: в модели PPC ты платишь за каждый показ объявления.", answer:false, explain:"В PPC оплата идёт за клик, показы бесплатны. За показы платят в модели CPM."},
+{id:"q007", type:"multi", q:"Какие метрики можно посчитать, зная только расход, показы и клики? Отметь все.", options:[
+ {t:"CTR", ok:true, why:"Клики / показы."},
+ {t:"CPC", ok:true, why:"Расход / клики."},
+ {t:"CPM", ok:true, why:"Расход / показы × 1000."},
+ {t:"CPL", why:"Нужны данные о лидах, а их в этом наборе нет."}
+], explain:"Расход, показы и клики дают весь верхний уровень воронки. Всё, что ниже клика, требует данных о конверсиях."},
+{id:"q008", type:"single", q:"Владелец BrightFix говорит: «У нас конверсия сайта 0,4%, давай увеличим бюджет вдвое, будет вдвое больше заказов». Что ответить?", options:[
+ {t:"Вдвое больше заказов будет, но и расход вырастет вдвое; сначала стоит заняться страницей, иначе мы просто удваиваем убыток", ok:true, why:"Реклама масштабирует существующую экономику, а не улучшает её."},
+ {t:"Согласиться: рост бюджета всегда даёт рост заказов", why:"Рост будет, но при плохой конверсии он окажется убыточным."},
+ {t:"Отказаться работать с таким сайтом", why:"Резко и непрофессионально: страница чинится, это обычная часть работы."},
+ {t:"Предложить сменить рекламную платформу", why:"Проблема не в платформе, а в том, что происходит после клика."}
+], explain:"Ключевая мысль урока: реклама умножает то, что уже есть. Слабое место после клика она не лечит."},
+{id:"q009", type:"single", q:"CTR объявления вырос с 3% до 6%, но количество заявок осталось прежним. Наиболее вероятное объяснение?", options:[
+ {t:"Новое объявление привлекает более широкую и менее целевую аудиторию", ok:true, why:"Больше кликов при том же числе заявок означает падение конверсии из клика."},
+ {t:"Google начал показывать объявление чаще", why:"Частота показов не объясняет, почему добавочные клики не конвертируются."},
+ {t:"Улучшилось качество целевой страницы", why:"Тогда заявок стало бы больше, а не столько же."},
+ {t:"Снизилась конкуренция в аукционе", why:"Это повлияло бы на CPC, а не на конверсию кликов."}
+], explain:"Рост CTR без роста результата — классический признак того, что объявление стало обещать что-то более широкое, чем ты продаёшь."},
+{id:"q010", type:"num", q:"Meta-кампания: CPM $22, CTR 1,1%. Чему равен CPC?", unit:"$", answer:2, tol:0.05, hint:"CPC = CPM делить на (CTR в долях × 1000).", explain:"22 / (0,011 × 1000) = 22 / 11 = $2,00."}
+]},
+
+{ id:"m0l2", title:"От клика до денег и обратно", blocks:[
+{t:"p", x:"Этот урок — сердце модуля. Здесь ты научишься считать, сколько можно платить за лид, чтобы бизнес зарабатывал. Именно этот расчёт отличает специалиста от человека, который «крутит рекламу»."},
+
+{t:"h", x:"Ступень первая: конверсия"},
+{t:"term", en:"Conversion", ru:"конверсия", d:"Целевое действие: заявка, звонок, покупка, регистрация. Что именно считать конверсией — твоё решение при настройке, и оно определяет, чему будет учиться алгоритм."},
+{t:"term", en:"CVR — conversion rate", ru:"коэффициент конверсии", d:"Доля кликов, превратившихся в конверсии. Показатель качества связки «объявление → страница → оффер». Падение CVR почти всегда означает, что сломалось одно из трёх звеньев."},
+{t:"f", x:"CVR = conversions / clicks × 100%"},
+{t:"term", en:"CPA — cost per acquisition", ru:"цена целевого действия", d:"Сколько стоила одна конверсия. Универсальный термин для любой цели."},
+{t:"term", en:"CPL — cost per lead", ru:"цена лида", d:"То же самое применительно к заявке в лидогенерации. В вакансиях по услугам встречается чаще, чем CPA."},
+{t:"f", x:"CPA = spend / conversions", note:"Вторая форма той же формулы: CPA = CPC / CVR"},
+{t:"p", x:"Вторая форма важнее первой. Она позволяет <b>прикинуть цену лида ещё до запуска</b>: если в нише клик стоит $3, а конверсия страницы 5%, то лид обойдётся примерно в $60. Этого достаточно, чтобы понять, стоит ли вообще заходить в канал."},
+
+{t:"h", x:"Ступень вторая: деньги"},
+{t:"term", en:"AOV — average order value", ru:"средний чек", d:"Выручка, делённая на количество заказов. Часто дешевле поднять средний чек, чем снизить стоимость привлечения."},
+{t:"term", en:"Margin", ru:"маржа", d:"Доля выручки, остающаяся после прямых затрат на исполнение заказа. Именно из маржи, а не из выручки, оплачивается реклама."},
+{t:"term", en:"ROAS — return on ad spend", ru:"возврат на рекламный расход", d:"Сколько выручки вернул каждый вложенный доллар. Главный KPI в e-commerce. Считается по выручке, а не по прибыли — отсюда частые заблуждения."},
+{t:"f", x:"ROAS = revenue / spend"},
+{t:"term", en:"Breakeven ROAS", ru:"точка безубыточности по ROAS", d:"Значение ROAS, при котором реклама не приносит и не теряет деньги. Считается как единица, делённая на маржу."},
+{t:"f", x:"Breakeven ROAS = 1 / margin", note:"Маржа 25% → безубыточность при ROAS 4,0. Всё что ниже — убыток"},
+{t:"term", en:"MER — marketing efficiency ratio", ru:"общая эффективность маркетинга", d:"Вся выручка бизнеса, делённая на весь рекламный расход по всем каналам. Не зависит от атрибуции, поэтому ему доверяют финансисты и им обычно заканчивается спор о том, чьи цифры правильные."},
+
+{t:"h", x:"Ступень третья: клиент"},
+{t:"term", en:"CAC — customer acquisition cost", ru:"стоимость привлечения клиента", d:"Сколько стоит привести не заявку, а оплатившего клиента. Всегда выше CPL, потому что не каждый лид покупает."},
+{t:"f", x:"CAC = CPL / lead-to-customer rate"},
+{t:"term", en:"LTV — lifetime value", ru:"пожизненная ценность клиента", d:"Сколько маржи клиент приносит за всё время сотрудничества, с учётом повторных покупок. Если LTV меньше CAC, бизнес теряет деньги на каждом новом клиенте."},
+{t:"term", en:"Payback period", ru:"срок окупаемости клиента", d:"За сколько месяцев клиент возвращает потраченное на его привлечение. Критично там, где деньги приходят частями: подписки, сервисные контракты, повторные визиты."},
+
+{t:"h", x:"Главный расчёт профессии: сколько можно платить за лид"},
+{t:"p", x:"Считается всегда в одну сторону — <b>от денег назад к рекламе</b>. Сначала определяем, сколько маржи приносит клиент. Потом — сколько лидов нужно на одного клиента. Потом — какую часть маржи бизнес готов отдать на привлечение."},
+{t:"ex", title:"BrightFix: считаем допустимый CPL", body:[
+"Средний чек $180, маржа 45% → с одного заказа остаётся <b>$81</b>.",
+"Из истории видно: примерно <b>40%</b> заявок превращаются в оплаченный выезд. Остальные — не дозвонились, передумали, не устроила цена или не наша техника.",
+"Значит маржа с одной заявки: 81 × 0,40 = <b>$32,40</b>.",
+"Владелец готов отдавать на привлечение не больше половины маржи, чтобы оставалось на аренду, диспетчера и прибыль. Значит <b>допустимый CPL = $16</b>.",
+"Проверим реальность: при CPC $1,60 это требует конверсии сайта 1,60 / 16 = <b>10%</b>. Для узкой страницы «Ремонт холодильников» с формой и телефоном это достижимо, для общей страницы «Услуги» — почти нет.",
+"Первый вывод по клиенту, который можно озвучить на второй встрече: <b>трафик нужно вести на узкие страницы под конкретную технику, а не на общую</b>."
+]},
+{t:"ex", title:"Что меняется при повторных заказах", body:[
+"Половина клиентов BrightFix обращается повторно в течение двух лет. Значит LTV примерно 81 × 1,5 = <b>$121,50</b>, а не $81.",
+"Пересчёт: маржа с заявки становится 121,50 × 0,40 = $48,60, а допустимый CPL при той же логике — <b>$24</b>.",
+"Разница между $16 и $24 — это полтора раза по допустимой цене лида, то есть совсем другой доступный объём трафика. Вот почему вопрос «а сколько клиентов возвращается» надо задавать на первой же встрече."
+]},
+
+{t:"h", x:"Второй кейс: e-commerce"},
+{t:"ex", title:"Kestrel Supply, магазин рюкзаков", body:[
+"AOV $120, маржа после себестоимости и доставки 35%.",
+"Breakeven ROAS = 1 / 0,35 = <b>2,86</b>. Ниже этого значения каждая продажа приносит убыток.",
+"Владелец хочет зарабатывать, а не работать в ноль, поэтому целевой ROAS ставим <b>4,0</b>. Это оставляет запас на операционные расходы.",
+"При ROAS 4,0 и AOV $120 допустимый CPA = 120 / 4 = <b>$30</b>.",
+"Типичная ошибка новичка: увидеть в кабинете ROAS 3,2, обрадоваться и начать масштабировать. При марже 35% это работа почти в ноль."
+]},
+{t:"warn", x:"ROAS считается по выручке. ROAS 4,0 звучит отлично и означает убыток при марже 20%. Первый вопрос любому клиенту e-commerce: какая у вас маржа."}
+], quiz:[
+{id:"q020", type:"num", q:"Кампания дала 620 кликов и 31 заявку. Чему равен CVR в процентах?", unit:"%", answer:5, tol:0.05, hint:"Конверсии делить на клики.", explain:"31 / 620 = 0,05 → 5%."},
+{id:"q021", type:"num", q:"CPC $3,20, CVR 4%. Чему равен CPA?", unit:"$", answer:80, tol:0.5, hint:"CPA = CPC / CVR, где CVR в долях (4% = 0,04).", explain:"3,20 / 0,04 = $80. Эта формула позволяет прикинуть CPA ещё до запуска."},
+{id:"q022", type:"num", q:"Потрачено $4 500, выручка $15 750. Чему равен ROAS в разах?", unit:"×", answer:3.5, tol:0.05, hint:"Выручка делить на расход.", explain:"15 750 / 4 500 = 3,5. Каждый вложенный доллар вернул $3,50 выручки."},
+{id:"q023", type:"num", q:"Маржа интернет-магазина 40%. Чему равен breakeven ROAS?", unit:"×", answer:2.5, tol:0.05, hint:"Единица делить на маржу в долях.", explain:"1 / 0,4 = 2,5. Ниже этого значения каждая продажа убыточна."},
+{id:"q024", type:"num", q:"CPL $60, в клиента превращается 25% лидов. Чему равен CAC?", unit:"$", answer:240, tol:1, hint:"Нужно четыре лида, чтобы получить одного клиента.", explain:"60 / 0,25 = $240."},
+{id:"q025", type:"num", q:"BrightFix: средний чек $180, маржа 45%, в оплаченный выезд превращается 40% заявок. Какова маржа с одной заявки?", unit:"$", answer:32.4, tol:0.3, hint:"Сначала маржа с заказа, потом умножить на долю заявок, доходящих до оплаты.", explain:"180 × 0,45 = $81 с заказа. 81 × 0,40 = $32,40 с заявки. Это потолок, выше которого платить за лид нельзя ни при каких условиях."},
+{id:"q026", type:"single", q:"ROAS кампании 4,0, маржа товара 20%. Как оценить результат?", options:[
+ {t:"Это убыток: точка безубыточности при марже 20% наступает на ROAS 5,0", ok:true, why:"1 / 0,2 = 5,0, а у нас 4,0."},
+ {t:"Отличный результат, надо масштабировать", why:"Масштабирование убытка увеличит убыток."},
+ {t:"Результат нейтральный, ровно в ноль", why:"В ноль было бы при ROAS 5,0."},
+ {t:"По этим данным вывод сделать нельзя", why:"Маржи и ROAS достаточно для однозначного вывода."}
+], explain:"Отсюда правило: ROAS без маржи — бессмысленное число. Всегда спрашивай маржу первым делом."},
+{id:"q027", type:"single", q:"Владелец BrightFix сообщил, что половина клиентов возвращается в течение двух лет. Как это меняет твою работу?", options:[
+ {t:"Растёт LTV, а значит и допустимая цена лида — можно покупать более дорогой трафик", ok:true, why:"Повторные заказы увеличивают маржу с одного привлечённого клиента."},
+ {t:"Ничего не меняет, считать надо по первому заказу", why:"Тогда ты недооценишь доступный бюджет и упустишь объём."},
+ {t:"Надо снизить целевой CPL, раз клиенты и так возвращаются", why:"Логика обратная: возвраты позволяют платить больше, а не меньше."},
+ {t:"Нужно перевести кампанию на оптимизацию по кликам", why:"Стратегия оптимизации к сроку жизни клиента отношения не имеет."}
+], explain:"В кейсе допустимый CPL вырос с $16 до $24 — это в полтора раза больше доступного трафика при той же экономике."},
+{id:"q028", type:"multi", q:"Какие метрики нельзя получить из рекламного кабинета без дополнительных данных? Отметь все.", options:[
+ {t:"LTV", ok:true, why:"Требует истории покупок из CRM или биллинга."},
+ {t:"CAC", ok:true, why:"Нужна доля лидов, ставших клиентами, а её знает отдел продаж."},
+ {t:"CTR", why:"Считается из показов и кликов прямо в кабинете."},
+ {t:"MER", ok:true, why:"Нужна общая выручка бизнеса, а не только атрибутированная реклама."}
+], explain:"Всё, что связано с реальными деньгами компании, живёт вне кабинета. Умение связать два мира — главное отличие сильного специалиста."},
+{id:"q029", type:"tf", q:"Верно ли: CPL всегда меньше или равен CAC.", answer:true, explain:"Лид — промежуточный шаг. Раз не каждый лид становится клиентом, привлечение клиента не может стоить дешевле привлечения лида."},
+{id:"q030", type:"num", q:"Kestrel Supply: AOV $120, целевой ROAS 4,0. Какой максимальный CPA можно себе позволить?", unit:"$", answer:30, tol:0.5, hint:"Средний чек делить на целевой ROAS.", explain:"120 / 4 = $30. Выше этого значения целевой ROAS не выдерживается."},
+{id:"q031", type:"single", q:"Канал A: CPL $25, в клиента превращается 5%. Канал B: CPL $80, в клиента превращается 30%. Какой выгоднее?", options:[
+ {t:"B: CAC $267 против $500 у канала A", ok:true, why:"25 / 0,05 = $500, а 80 / 0,30 ≈ $267."},
+ {t:"A: цена лида втрое ниже", why:"Цена лида не говорит ничего без конверсии в клиента."},
+ {t:"Одинаково, разница компенсируется", why:"Разница почти двукратная в пользу B."},
+ {t:"Нельзя сравнить без данных о выручке", why:"Для сравнения между собой достаточно CAC."}
+], explain:"Самый частый и самый дорогой самообман в лидогенерации: оптимизировать CPL вместо CAC."}
+]},
+
+{ id:"m0l3", title:"Воронка: где именно теряются деньги", blocks:[
+{t:"p", x:"Воронка нужна не для красивой картинки в презентации. Это диагностический инструмент: когда результат плохой, воронка показывает, на каком именно шаге всё сломалось, и не даёт чинить наугад."},
+
+{t:"h", x:"Полная цепочка"},
+{t:"f", x:"Показ → клик → визит → конверсия → лид → MQL → SQL → сделка → оплата", note:"На каждом переходе есть своя метрика и свой ответственный"},
+{t:"term", en:"Lead", ru:"лид", d:"Человек, оставивший контакт. Ещё не клиент и часто вообще не целевой."},
+{t:"term", en:"MQL — marketing qualified lead", ru:"лид, пригодный для маркетинга", d:"Лид, который по формальным признакам похож на целевого: нужный регион, нужный тип запроса, реальные контакты. Отсеивается на стороне маркетинга."},
+{t:"term", en:"SQL — sales qualified lead", ru:"лид, принятый в продажи", d:"Лид, который отдел продаж посмотрел и признал годным для работы. Доля SQL — главный честный показатель качества трафика."},
+{t:"term", en:"Opportunity", ru:"сделка в работе", d:"Лид, дошедший до обсуждения условий. В CRM это отдельная стадия с суммой и вероятностью закрытия."},
+{t:"term", en:"Close rate", ru:"доля закрытых сделок", d:"Какая часть сделок доходит до оплаты. Считается отделом продаж, но напрямую зависит от того, какой трафик ты привёл."},
+
+{t:"h", x:"Разбор воронки BrightFix"},
+{t:"ex", title:"Что показали цифры за месяц", body:[
+"60 000 показов → 1 500 кликов → 1 350 визитов → 95 заявок → 71 дозвон → 38 оплаченных выездов.",
+"Считаем переходы: CTR 2,5%, потеря на загрузке страницы 10%, CVR 7,0%, дозвон 75%, оплата 54%.",
+"Расход $2 400 → CPL = 2 400 / 95 = <b>$25,26</b>. Допустимый CPL мы посчитали как $16 (или $24 с учётом повторных заказов).",
+"Стоимость оплаченного выезда: 2 400 / 38 = <b>$63,16</b> при марже с заказа $81. То есть бизнес зарабатывает, но всего $18 с выезда — это слишком тонко.",
+"Где узкое место? Дозвон 75% выглядит нормально. Оплата 54% — тоже. А вот <b>потеря 25% заявок на дозвоне</b> в абсолютных числах это 24 заявки по $25 — почти $600 выброшенных денег в месяц, и чинится это не рекламой, а скоростью ответа диспетчера."
+]},
+{t:"p", x:"Обрати внимание на приём: сначала считаем проценты по каждому переходу, потом переводим самый слабый переход в деньги. Процент сам по себе не убеждает клиента, а «мы теряем $600 в месяц на том, что не берут трубку» — убеждает."},
+
+{t:"h", x:"Диагностическая таблица"},
+{t:"tab", head:["Симптом","Вероятная причина","Что проверять"], rows:[
+["Низкий CTR при нормальных показах","Объявление не отвечает на запрос","Соответствие текста запросу, наличие ассетов"],
+["Клики есть, визитов меньше","Медленная страница или ошибка перехода","Скорость загрузки, работоспособность ссылки на мобильном"],
+["Высокий CTR, низкий CVR","Обещание в объявлении не совпадает со страницей","Message match, содержание и форма страницы"],
+["Хороший CVR, мало SQL","Трафик нецелевой, оффер привлекает не тех","Отчёт по запросам, гео, формулировку оффера"],
+["Заявки есть, дозвона нет","Проблема на стороне бизнеса","Скорость ответа, часы работы, качество контактов"],
+["Всё хорошо, денег нет","Экономика не сходится изначально","Маржу, средний чек, допустимый CPL"]
+]},
+
+{t:"h", x:"Почему CPL в одиночку врёт"},
+{t:"p", x:"Алгоритмы обучаются на том, что ты отдаёшь им как конверсию. Если конверсией считается любое заполнение формы, платформа начнёт искать людей, которые охотно заполняют формы. Это не те же самые люди, что платят деньги."},
+{t:"warn", x:"Аккаунты, которые оптимизируются только на заполнение формы, кормят алгоритм мусорным сигналом. Симптом всегда один: CPL падает, количество заявок растёт, количество сделок стоит на месте."},
+{t:"term", en:"Lead quality", ru:"качество лида", d:"Насколько привлечённые заявки соответствуют реальному покупателю. Измеряется долей SQL и долей закрытых сделок, а не количеством заявок."},
+{t:"p", x:"Решение, к которому мы придём в модуле по измерению: <b>вернуть в рекламную платформу информацию о том, какие лиды стали деньгами</b>. Тогда алгоритм начинает искать похожих на покупателей, а не похожих на заполнителей форм."},
+
+{t:"h", x:"Как разговаривать с отделом продаж"},
+{t:"p", x:"Фраза «лиды плохие» в исполнении продажников означает что угодно. Задача специалиста — перевести её в проверяемое. Три вопроса, которые это делают:"},
+{t:"ul", items:[
+"Сколько из последних 50 заявок вы считаете годными и почему именно эти не годятся",
+"Что общего у негодных: регион, тип запроса, время суток, конкретная формулировка потребности",
+"Можете ли вы ставить статус в CRM по каждой заявке — без этого я не смогу передать качество обратно в рекламу"
+]}
+], quiz:[
+{id:"q040", type:"num", q:"1 500 кликов дали 90 заявок, из них 36 получили статус SQL. Какая доля заявок стала SQL, в процентах?", unit:"%", answer:40, tol:0.5, hint:"SQL делить на заявки.", explain:"36 / 90 = 0,4 → 40%. Ключевой показатель качества трафика."},
+{id:"q041", type:"num", q:"BrightFix: 95 заявок за месяц, дозвониться удалось до 71. Сколько заявок потеряно на этом шаге?", unit:"заявок", answer:24, tol:0.5, hint:"Простая разность.", explain:"95 − 71 = 24 заявки. При CPL $25 это около $600 выброшенных за месяц денег."},
+{id:"q042", type:"single", q:"В аккаунте CPL снизился с $70 до $40, но количество сделок не изменилось. Как это трактовать?", options:[
+ {t:"Качество лидов упало — стало больше дешёвых нецелевых заявок", ok:true, why:"Лидов больше при том же результате, значит доля годных снизилась."},
+ {t:"Отличный результат, можно масштабировать", why:"Денег бизнес получает столько же, а расход вырос."},
+ {t:"Это ошибка трекинга", why:"Возможно, но первая и самая частая причина — смещение трафика в сторону низкого интента."},
+ {t:"Надо снизить бюджет", why:"Сначала нужно понять причину."}
+], explain:"Падение CPL без роста сделок — классический признак того, что алгоритм нашёл дешёвую аудиторию с низким интентом."},
+{id:"q043", type:"single", q:"Что правильнее всего отдавать платформе как основную конверсию в лидогенерации услуг?", options:[
+ {t:"Заявку, подтверждённую как годную на стороне бизнеса", ok:true, why:"Сигнал ближе к деньгам, алгоритм учится искать похожих."},
+ {t:"Любое заполнение формы", why:"Самый мусорный сигнал: платформа начнёт искать любителей форм."},
+ {t:"Просмотр страницы «Контакты»", why:"Слишком слабый сигнал, напрямую не связан с деньгами."},
+ {t:"Клик по кнопке «Подробнее»", why:"Микродействие, не отражает коммерческий интерес."}
+], explain:"Чем ближе сигнал к деньгам, тем лучше работает автоматика. Обратная сторона — таких событий меньше, поэтому иногда комбинируют основную и вспомогательную цели."},
+{id:"q044", type:"multi", q:"Воронка: 50 000 показов → 500 кликов → 50 заявок → 5 SQL. Какие выводы обоснованы? Отметь все.", options:[
+ {t:"CTR составляет 1%", ok:true, why:"500 / 50 000 = 1%."},
+ {t:"CVR составляет 10%", ok:true, why:"50 / 500 = 10%."},
+ {t:"Доля SQL 10% от заявок — это узкое место", ok:true, why:"5 из 50 при хорошей конверсии в заявку."},
+ {t:"Проблема в лендинге", why:"CVR 10% как раз высокий. Проблема ниже — в качестве трафика или в оффере."}
+], explain:"Хороший CVR при низкой доле SQL — признак того, что оффер или запросы привлекают нецелевых людей."},
+{id:"q045", type:"single", q:"Высокий CTR при низком CVR. Что проверять в первую очередь?", options:[
+ {t:"Соответствие обещания в объявлении содержанию страницы", ok:true, why:"Классический разрыв message match."},
+ {t:"Размер дневного бюджета", why:"Бюджет на конверсию страницы не влияет."},
+ {t:"Частоту показов", why:"В поиске частота почти не играет роли."},
+ {t:"Стратегию ставок", why:"Ставки управляют закупкой, а не поведением на странице."}
+], explain:"Люди охотно кликают, но уходят — значит объявление обещает не то, что они находят."},
+{id:"q046", type:"tf", q:"Верно ли: рост количества лидов всегда означает улучшение результата для бизнеса.", answer:false, explain:"Количество лидов без их качества ничего не говорит. Приоритет маркетологов в 2026 сместился именно к качеству лидов и конверсии лида в клиента."},
+{id:"q047", type:"single", q:"Отдел продаж говорит «лиды плохие». Что сделать первым?", options:[
+ {t:"Попросить разобрать последние 50 заявок и назвать, что общего у негодных", ok:true, why:"Превращает эмоцию в проверяемый признак: регион, тип запроса, время."},
+ {t:"Сразу снизить бюджет и переписать объявления", why:"Изменения наугад без понимания причины."},
+ {t:"Объяснить, что качество лидов не входит в зону ответственности рекламы", why:"Формально близко к правде, практически — способ потерять клиента."},
+ {t:"Переключить кампанию на другую цель", why:"Не зная причины, это перебор настроек."}
+], explain:"Задача специалиста — перевести «плохие лиды» в конкретный признак, который можно отсечь настройками или минус-словами."},
+{id:"q048", type:"num", q:"Воронка: 1 200 кликов, 84 заявки, 42 SQL, 14 сделок. Какая доля кликов доходит до сделки, в процентах?", unit:"%", answer:1.17, tol:0.05, hint:"Сделки делить на клики.", explain:"14 / 1 200 = 0,0117 → около 1,17%. Полезная привычка — считать сквозную конверсию, а не только по соседним шагам."},
+{id:"q049", type:"single", q:"Где проходит граница ответственности PPC-специалиста?", options:[
+ {t:"Формально до заявки, но отвечать приходится за её качество вплоть до сделки", ok:true, why:"Поэтому нужно уметь работать с данными CRM."},
+ {t:"Строго до клика", why:"За трафик без результата платить никто не будет."},
+ {t:"До закрытия сделки включительно", why:"Закрытие — работа отдела продаж."},
+ {t:"Только до показа объявления", why:"Уровень медиабайинга десятилетней давности."}
+], explain:"Формально твоя зона — до конверсии. Практически на собеседовании спросят, как ты обеспечиваешь качество лида."}
+]},
+
+{ id:"m0l4", title:"Атрибуция: почему цифры не сходятся", blocks:[
+{t:"p", x:"Рекламный кабинет, GA4 и CRM почти никогда не показывают одно и то же число конверсий. Это не поломка, а следствие того, что они считают разные вещи по разным правилам. Специалист, который этого не понимает, либо паникует, либо врёт клиенту."},
+
+{t:"term", en:"Attribution", ru:"атрибуция", d:"Правило, по которому конверсия приписывается каналу или каналам. Разные правила дают разные цифры при одних и тех же реальных продажах."},
+{t:"term", en:"Touchpoint", ru:"точка касания", d:"Любой контакт человека с рекламой или сайтом по пути к покупке. Путь почти никогда не состоит из одного касания."},
+
+{t:"h", x:"Модели атрибуции"},
+{t:"tab", head:["Модель","Кому отдаётся заслуга","Когда применима"], rows:[
+["Last click","Последнему клику перед конверсией","Короткий цикл сделки, простая воронка"],
+["First click","Первому касанию","Когда важно понять, что приводит новую аудиторию"],
+["Linear","Поровну всем касаниям","Редко используется, но помогает увидеть все участвующие каналы"],
+["Data-driven","Распределяется по статистике самой платформы","Модель по умолчанию в Google Ads"]
+]},
+{t:"p", x:"Практический смысл: last click систематически недооценивает каналы верхнего уровня воронки. Если резать бюджеты только по last click, первым под нож пойдёт то, что приводит новых людей, и через пару месяцев спрос начнёт пересыхать."},
+
+{t:"h", x:"Окна и просмотры"},
+{t:"term", en:"Conversion window", ru:"окно конверсии", d:"Сколько дней после клика конверсия ещё засчитывается рекламе. В Google Ads по умолчанию 30 дней, в Meta обычно 7 дней после клика."},
+{t:"term", en:"View-through conversion", ru:"конверсия после просмотра", d:"Человек увидел объявление, не кликнул, но позже пришёл сам и сконвертировался. Meta и Google их считают, GA4 — нет. Это главная причина расхождений."},
+{t:"warn", x:"Google Ads по умолчанию относит конверсию к <b>дате клика</b>, а не к дате самой конверсии. Поэтому вчерашние цифры дозаполняются ещё несколько дней и по ним нельзя принимать быстрые решения."},
+
+{t:"h", x:"Три системы — три числа"},
+{t:"tab", head:["Система","Что считает","Типичное смещение"], rows:[
+["Рекламный кабинет","Свои клики и просмотры по своим окнам","Завышает: каждая платформа приписывает конверсию себе"],
+["GA4","Сессии на сайте по своей модели","Занижает: не видит view-through, теряет данные из-за блокировок и отказов от согласия"],
+["CRM","Реальные заявки и сделки","Самое честное по деньгам, но не всегда знает источник"]
+]},
+{t:"ex", title:"BrightFix: сводим три цифры", body:[
+"Google Ads показывает <b>112</b> конверсий, GA4 — <b>95</b> ключевых событий, в CRM за тот же месяц <b>95</b> заявок, из которых 12 пришли не с рекламы.",
+"Разбор: Google засчитал 17 конверсий сверх GA4 — часть из них view-through и звонки по отложенному клику, часть попала в окно 30 дней с прошлого месяца.",
+"GA4 и CRM сошлись по цифре 95, но это совпадение: в GA4 95 событий с рекламы, а в CRM 95 всех заявок вместе с органикой. Реально с рекламы пришло 83.",
+"Что сказать клиенту: «С рекламы в этом месяце 83 заявки, цена $28,90. Google в своём интерфейсе показывает 112, потому что учитывает отложенные конверсии и просмотры — это нормально, для управления кампанией я смотрю на его данные, а для разговора о деньгах на CRM».",
+"Такой ответ, произнесённый спокойно и без оправданий, обычно снимает вопрос навсегда."
+]},
+{t:"warn", x:"Никогда не складывай конверсии из Google Ads и Meta Ads. Если человек кликнул оба объявления, обе платформы запишут конверсию себе, и сумма окажется больше реальных продаж."},
+
+{t:"h", x:"Какой источник для какой задачи"},
+{t:"ul", items:[
+"<b>Оптимизация внутри Google Ads</b> — данные Google Ads. Алгоритм учится на своих данных, оптимизировать надо на них же",
+"<b>Сравнение Google и Meta между собой</b> — GA4. Одна линейка для обоих каналов",
+"<b>Разговор о деньгах</b> — CRM и финансы. Только там видны реальные сделки",
+"<b>Проверка, работает ли канал вообще</b> — MER по всей выручке, потому что он не зависит от атрибуции"
+]},
+{t:"term", en:"Incrementality", ru:"инкрементальность", d:"Сколько продаж реклама создала дополнительно к тем, что случились бы и без неё. Самый честный, но и самый дорогой способ измерения: требует контрольных групп и отключения канала на время теста. Джуниору достаточно знать термин и понимать идею."}
+], quiz:[
+{id:"q060", type:"single", q:"Google Ads показывает 100 конверсий, Meta — 80, а в CRM за период 140 заявок. Что происходит?", options:[
+ {t:"Часть конверсий засчитана обеими платформами, поэтому сумма 180 больше реальных 140", ok:true, why:"Каждая платформа приписывает пересекающиеся конверсии себе."},
+ {t:"CRM теряет 40 заявок", why:"Возможно, но первое объяснение — двойной учёт в кабинетах."},
+ {t:"Трекинг сломан в обеих платформах", why:"Такое расхождение ожидаемо и не означает поломку."},
+ {t:"Meta приписывает себе чужие конверсии незаконно", why:"Это работа окна атрибуции, включая view-through."}
+], explain:"Складывать конверсии разных кабинетов нельзя. Для общей картины используют GA4 на одной линейке или MER."},
+{id:"q061", type:"single", q:"Что такое view-through conversion?", options:[
+ {t:"Человек увидел объявление, не кликнул, позже пришёл сам и сконвертировался", ok:true, why:"Платформа засчитывает такую конверсию себе в пределах своего окна."},
+ {t:"Человек просмотрел видео до конца", why:"Это видеометрика, к атрибуции отношения не имеет."},
+ {t:"Конверсия по последнему клику", why:"Это click-through, противоположность."},
+ {t:"Конверсия, подтверждённая отделом продаж", why:"Это про качество лида, а не про модель атрибуции."}
+], explain:"View-through — главная причина, по которой Meta показывает больше конверсий, чем GA4: GA4 их вообще не видит."},
+{id:"q062", type:"tf", q:"Верно ли: GA4 обычно показывает меньше конверсий по рекламному каналу, чем сам рекламный кабинет.", answer:true, explain:"GA4 не учитывает view-through и теряет часть данных из-за блокировщиков и отказов от согласия."},
+{id:"q063", type:"single", q:"Окно конверсии в Google Ads 30 дней. Клик 1 марта, заявка 25 марта. Что произойдёт?", options:[
+ {t:"Конверсия засчитается и попадёт в отчёт за 1 марта", ok:true, why:"Google относит конверсию к дате клика."},
+ {t:"Не засчитается, прошло слишком много времени", why:"25 дней укладываются в окно 30 дней."},
+ {t:"Попадёт в отчёт за 25 марта", why:"По умолчанию Google Ads показывает конверсии по дате клика."},
+ {t:"Засчитается только в GA4", why:"Засчитается именно в Google Ads."}
+], explain:"Отнесение к дате клика — причина, по которой нельзя судить о вчерашнем дне сразу."},
+{id:"q064", type:"multi", q:"Для каких задач какой источник правильнее? Отметь все верные утверждения.", options:[
+ {t:"Оптимизация внутри Google Ads — данные Google Ads", ok:true, why:"Алгоритм учится на своих данных."},
+ {t:"Сравнение Google и Meta — GA4", ok:true, why:"Одна линейка для обоих каналов."},
+ {t:"Отчёт о деньгах — CRM или финансы", ok:true, why:"Только там видны реальные сделки."},
+ {t:"Общее число конверсий — сумма Google Ads и Meta Ads", why:"Даст завышенную цифру из-за двойного учёта."}
+], explain:"Каждый источник хорош для своей задачи. Ошибка — брать один источник для всего."},
+{id:"q065", type:"tf", q:"Верно ли: last click недооценивает каналы, работающие в начале пути клиента.", answer:true, explain:"Вся заслуга уходит последнему касанию, поэтому знакомящие с брендом каналы выглядят бесполезными и их режут по ошибке."},
+{id:"q066", type:"single", q:"Клиент спрашивает: «Почему у вас в отчёте 83 заявки, а Google говорит 112? Вы занижаете?» Лучший ответ?", options:[
+ {t:"Объяснить разницу окон и view-through и сказать, какой источник для какой задачи используется", ok:true, why:"Спокойное объяснение снимает вопрос навсегда."},
+ {t:"Показать цифру Google, раз она больше", why:"Сознательное завышение, за которое придётся отвечать при сверке с деньгами."},
+ {t:"Сказать, что Google завышает и его данным доверять нельзя", why:"Неточно: его данные нужны для оптимизации кампании."},
+ {t:"Пообещать разобраться и вернуться позже", why:"Вопрос стандартный, ответ на него надо знать сразу."}
+], explain:"Умение объяснить расхождение без оправданий — признак того, что специалист понимает, как устроено измерение."},
+{id:"q067", type:"single", q:"Что такое инкрементальность?", options:[
+ {t:"Сколько продаж реклама создала дополнительно к тем, что случились бы и без неё", ok:true, why:"Самый честный способ измерения, требующий контрольных групп."},
+ {t:"Постепенное увеличение бюджета", why:"Это масштабирование."},
+ {t:"Рост конверсий месяц к месяцу", why:"Это динамика, а не инкрементальность."},
+ {t:"Модель атрибуции по всем касаниям", why:"Это linear-модель."}
+], explain:"Ключевая идея: часть конверсий случилась бы и без рекламы. Особенно это касается брендовых запросов."},
+{id:"q068", type:"num", q:"С рекламы 83 заявки при расходе $2 400. Чему равен фактический CPL по данным CRM?", unit:"$", answer:28.9, tol:0.3, hint:"Расход делить на подтверждённые заявки.", explain:"2 400 / 83 = $28,92. Именно эта цифра идёт в разговор о деньгах, а не та, что в кабинете."}
+]},
+
+{ id:"m0l5", title:"Планирование: считаем от денег назад", blocks:[
+{t:"p", x:"Последний урок модуля и самый практичный. Умение построить медиаплан до запуска — то, что чаще всего дают в тестовом задании, и то, чего почти никогда не умеют кандидаты без опыта."},
+
+{t:"h", x:"Принцип"},
+{t:"p", x:"Планирование всегда идёт <b>от бизнес-цели назад к бюджету</b>, а не от бюджета вперёд к надеждам. Направление расчёта такое:"},
+{t:"f", x:"Цель по выручке → сделки → лиды → клики → бюджет", note:"Каждый шаг делится на конверсию соответствующего перехода"},
+
+{t:"ex", title:"BrightFix: план на следующий квартал", body:[
+"<b>Цель владельца:</b> дополнительно 90 оплаченных выездов за квартал, то есть 30 в месяц.",
+"<b>Шаг 1. Сколько нужно заявок.</b> В оплату превращается 40% заявок → 30 / 0,40 = <b>75 заявок в месяц</b>.",
+"<b>Шаг 2. Сколько нужно кликов.</b> Конверсия сайта 7% → 75 / 0,07 ≈ <b>1 072 клика в месяц</b>.",
+"<b>Шаг 3. Сколько это стоит.</b> CPC $1,60 → 1 072 × 1,60 ≈ <b>$1 715 в месяц</b>.",
+"<b>Шаг 4. Проверка экономики.</b> CPL = 1 715 / 75 = $22,87. Допустимый CPL с учётом повторных заказов — $24. Проходим, но впритык.",
+"<b>Шаг 5. Проверка реальности.</b> Хватит ли спроса на 1 072 клика в месяц? Это проверяется в Keyword Planner и по показателю доли полученных показов. Если ниша выбирает только 600 кликов, план недостижим при любом бюджете, и об этом надо сказать до старта, а не через месяц."
+]},
+{t:"warn", x:"Пятый шаг пропускают чаще всего. План, который красиво считается на бумаге, но упирается в потолок спроса, — самый быстрый способ испортить отношения с клиентом в первый же месяц."},
+
+{t:"h", x:"Обратная задача: дали бюджет, что обещать"},
+{t:"ex", title:"«У нас есть $5 000 в месяц, сколько будет заявок?»", body:[
+"Считаем в обратную сторону: 5 000 / 1,60 = 3 125 кликов → × 7% = <b>219 заявок</b> → × 40% = <b>87 выездов</b>.",
+"Но прежде чем называть эту цифру, нужны две поправки.",
+"<b>Поправка на спрос:</b> если доступный объём ниши 1 500 кликов в месяц, то $5 000 просто не открутятся, либо CPC вырастет из-за более широких и дорогих запросов. Честный ответ: «в текущей нише мы освоим примерно $2 400, для остального нужно расширять географию или добавлять каналы».",
+"<b>Поправка на период обучения:</b> первые 2–4 недели результат будет хуже расчётного. Обещать плановые цифры с первого месяца нельзя.",
+"Итоговая формулировка для клиента: диапазон, а не точка. «Ожидаю 70–90 выездов в месяц на третий месяц работы, в первый месяц — 40–55»."
+]},
+{t:"p", x:"Привычка называть диапазон вместо точного числа — профессиональный навык. Точное число ты не можешь знать, а диапазон показывает, что ты понимаешь источники неопределённости."},
+
+{t:"h", x:"Контроль расхода в течение месяца"},
+{t:"term", en:"Pacing", ru:"темп расхода бюджета", d:"Соотношение фактического расхода с планом. Проверяется минимум раз в неделю, иначе перерасход обнаруживается в последний день месяца, когда сделать уже ничего нельзя."},
+{t:"f", x:"Прогноз расхода = расход на сегодня / прошло дней × дней в месяце"},
+{t:"ex", title:"Задача на pacing", body:[
+"Месячный бюджет $9 000. Прошло 18 дней, потрачено $6 300.",
+"Прогноз: 6 300 / 18 × 30 = <b>$10 500</b>. Перерасход $1 500, то есть 17%.",
+"Варианты: снизить дневные бюджеты примерно на 20% на оставшиеся 12 дней, либо согласовать увеличение месячного бюджета, если результат того стоит.",
+"Что нельзя: просто выключить кампании на неделю. Это обрушит обучение алгоритма и в следующем месяце придётся начинать заново."
+]},
+
+{t:"h", x:"Типовое тестовое задание"},
+{t:"p", x:"Почти во всех агентствах тестовое задание для джуниора выглядит одинаково: дают нишу, бюджет и цель, просят прислать план. Проверяют не красоту таблицы, а наличие логики."},
+{t:"ul", items:[
+"Расчёт идёт от цели назад, а не от бюджета вперёд",
+"Указаны допущения: откуда взята конверсия, откуда CPC, что сделано, если данных нет",
+"Проверен потолок спроса, а не только арифметика",
+"Названы риски и что будет, если предположения не подтвердятся",
+"Результат дан диапазоном, с оговоркой про период обучения"
+]},
+{t:"p", x:"Наличие всех пяти пунктов ставит тебя выше большинства кандидатов, даже если сами цифры окажутся неточными. Неточные цифры на старте — норма. Отсутствие логики — нет."}
+], quiz:[
+{id:"q080", type:"num", q:"Цель 30 оплаченных заказов в месяц, в оплату превращается 40% заявок. Сколько нужно заявок?", unit:"заявок", answer:75, tol:0.5, hint:"Делим цель на конверсию в долях.", explain:"30 / 0,40 = 75 заявок."},
+{id:"q081", type:"num", q:"Нужно 75 заявок, конверсия сайта 7%. Сколько нужно кликов? Округли до целого.", unit:"кликов", answer:1072, tol:5, hint:"Заявки делить на конверсию в долях.", explain:"75 / 0,07 ≈ 1 072 клика."},
+{id:"q082", type:"num", q:"Нужно 1 072 клика, CPC $1,60. Какой нужен месячный бюджет?", unit:"$", answer:1715, tol:10, hint:"Клики умножить на цену клика.", explain:"1 072 × 1,60 ≈ $1 715."},
+{id:"q083", type:"num", q:"Бюджет $4 800 в месяц, CPC $2,00, конверсия сайта 5%. Сколько заявок ожидать?", unit:"заявок", answer:120, tol:1, hint:"Сначала клики, потом умножить на конверсию.", explain:"4 800 / 2 = 2 400 кликов, × 0,05 = 120 заявок."},
+{id:"q084", type:"num", q:"Месячный бюджет $12 000. Прошло 10 дней из 30, потрачено $4 600. Каким будет прогноз расхода за месяц?", unit:"$", answer:13800, tol:50, hint:"Расход делить на прошедшие дни, умножить на дни в месяце.", explain:"4 600 / 10 × 30 = $13 800. Перерасход $1 800."},
+{id:"q085", type:"single", q:"Какой шаг планирования чаще всего пропускают?", options:[
+ {t:"Проверку потолка спроса в нише", ok:true, why:"План может быть арифметически верным и физически недостижимым."},
+ {t:"Расчёт количества кликов", why:"Этот шаг делают все, он очевиден."},
+ {t:"Определение цели по выручке", why:"С неё обычно и начинают."},
+ {t:"Расчёт бюджета", why:"Это результат, который все считают."}
+], explain:"Если в нише всего 600 кликов в месяц, план на 1 072 не сработает ни при каком бюджете."},
+{id:"q086", type:"single", q:"Клиент спрашивает, сколько заявок будет в первый месяц. Лучший ответ?", options:[
+ {t:"Назвать диапазон и отдельно оговорить, что первые 2–4 недели идёт период обучения", ok:true, why:"Показывает понимание источников неопределённости."},
+ {t:"Назвать точное число из расчёта", why:"Точное число ты знать не можешь, а отвечать за него придётся."},
+ {t:"Сказать, что прогнозировать невозможно", why:"Уход от ответа, клиенту нужны ориентиры для решения."},
+ {t:"Назвать заниженное число, чтобы потом превзойти ожидания", why:"Манипуляция, из-за которой бюджет могут вообще не согласовать."}
+], explain:"Диапазон плюс явные допущения — профессиональный формат прогноза."},
+{id:"q087", type:"multi", q:"Что должно быть в тестовом задании на медиаплан? Отметь все.", options:[
+ {t:"Расчёт от цели назад к бюджету", ok:true, why:"Показывает направление мышления."},
+ {t:"Явно указанные допущения и их источник", ok:true, why:"Без этого цифры выглядят выдуманными."},
+ {t:"Проверка потолка спроса", ok:true, why:"Отделяет реалистичный план от арифметики."},
+ {t:"Точный прогноз выручки до доллара", why:"Ложная точность, которая только вредит доверию."}
+], explain:"Проверяют логику, а не точность. Неточные цифры на старте — норма, отсутствие логики — нет."},
+{id:"q088", type:"single", q:"Обнаружен перерасход 17% на середине месяца. Что делать?", options:[
+ {t:"Снизить дневные бюджеты примерно на столько же на остаток месяца или согласовать увеличение", ok:true, why:"Плавная корректировка не ломает обучение."},
+ {t:"Выключить кампании до конца месяца", why:"Обрушит обучение алгоритма, в следующем месяце придётся начинать заново."},
+ {t:"Ничего не делать, к концу месяца выровняется", why:"Само не выравнивается, темп сохранится."},
+ {t:"Снизить целевой CPA вдвое", why:"Это другой рычаг, он обвалит объём и перезапустит обучение."}
+], explain:"Бюджет корректируется бюджетом. Резкие остановки обходятся дороже перерасхода."},
+{id:"q089", type:"num", q:"Kestrel Supply: цель $60 000 выручки в месяц, AOV $120, целевой ROAS 4,0. Какой нужен рекламный бюджет?", unit:"$", answer:15000, tol:100, hint:"Выручка делить на целевой ROAS.", explain:"60 000 / 4 = $15 000. Попутно: это 500 заказов по $30 CPA."}
+]}
+
+], exam:[
+{id:"e001", type:"num", q:"Экзамен. Потрачено $1 200, показов 300 000, кликов 6 000, заявок 240. Чему равен CPA?", unit:"$", answer:5, tol:0.05, explain:"1 200 / 240 = $5,00."},
+{id:"e002", type:"num", q:"По тем же данным: чему равен CTR в процентах?", unit:"%", answer:2, tol:0.05, explain:"6 000 / 300 000 = 2%."},
+{id:"e003", type:"num", q:"По тем же данным: чему равен CVR в процентах?", unit:"%", answer:4, tol:0.05, explain:"240 / 6 000 = 4%."},
+{id:"e004", type:"num", q:"CPM $12, CTR 1,5%. Чему равен CPC?", unit:"$", answer:0.8, tol:0.02, explain:"12 / (0,015 × 1000) = 12 / 15 = $0,80."},
+{id:"e005", type:"num", q:"Маржа товара 25%. При каком ROAS реклама выходит в ноль?", unit:"×", answer:4, tol:0.1, explain:"1 / 0,25 = 4,0."},
+{id:"e006", type:"num", q:"Средний чек $200, маржа 50%, в оплату превращается 30% заявок. Какова маржа с одной заявки?", unit:"$", answer:30, tol:0.5, explain:"200 × 0,5 = $100 с заказа, × 0,30 = $30 с заявки."},
+{id:"e007", type:"num", q:"Цель 48 продаж в месяц, в продажу превращается 25% заявок, конверсия сайта 4%, CPC $2,50. Какой нужен бюджет?", unit:"$", answer:12000, tol:100, explain:"48 / 0,25 = 192 заявки. 192 / 0,04 = 4 800 кликов. 4 800 × 2,50 = $12 000."},
+{id:"e008", type:"num", q:"Бюджет $7 500, CPC $3,00, конверсия сайта 6%. Сколько заявок ожидать?", unit:"заявок", answer:150, tol:1, explain:"7 500 / 3 = 2 500 кликов, × 0,06 = 150 заявок."},
+{id:"e009", type:"num", q:"Месячный бюджет $15 000. Прошло 20 дней, потрачено $11 000. Прогноз расхода за месяц?", unit:"$", answer:16500, tol:50, explain:"11 000 / 20 × 30 = $16 500."},
+{id:"e010", type:"num", q:"CPL $45, в SQL превращается 40% лидов, в сделку — 25% SQL. Сколько стоит одна сделка?", unit:"$", answer:450, tol:5, explain:"0,4 × 0,25 = 0,1. 45 / 0,1 = $450."},
+{id:"e011", type:"single", q:"Что означает MER и чем он отличается от ROAS?", options:[
+ {t:"Вся выручка бизнеса делить на весь рекламный расход; не зависит от атрибуции", ok:true, why:"Поэтому его любят финансисты."},
+ {t:"То же самое, что ROAS, просто другое название", why:"ROAS считается по атрибутированной выручке конкретного канала."},
+ {t:"Выручка минус расход", why:"Это прибыль, а не отношение."},
+ {t:"Средняя эффективность объявлений в кампании", why:"Такой метрики не существует."}
+], explain:"MER не спорит с атрибуцией, потому что вообще её не использует."},
+{id:"e012", type:"single", q:"CPL упал на 45%, доля SQL упала с 35% до 12%. Что делать первым делом?", options:[
+ {t:"Найти, какие запросы или креативы дают мусорные лиды, и отсечь их", ok:true, why:"Проблема в источнике трафика."},
+ {t:"Радоваться снижению CPL и увеличивать бюджет", why:"CAC при этом вырос, масштабирование усилит убыток."},
+ {t:"Перевести кампанию на оплату за показы", why:"Модель оплаты не влияет на качество аудитории."},
+ {t:"Отключить кампанию целиком", why:"Слишком грубо, часть трафика наверняка рабочая."}
+], explain:"Падение CPL при падении доли SQL означает, что алгоритм нашёл дешёвых нецелевых людей."},
+{id:"e013", type:"multi", q:"Какие утверждения верны? Отметь все.", options:[
+ {t:"CPA = CPC / CVR", ok:true, why:"Полезно для прикидки до запуска."},
+ {t:"CPC = CPM / (CTR × 1000)", ok:true, why:"Связывает оплату за показы с ценой клика."},
+ {t:"ROAS = spend / revenue", why:"Наоборот: выручка делить на расход."},
+ {t:"Breakeven ROAS = 1 / margin", ok:true, why:"Маржа 25% → безубыточность при ROAS 4,0."}
+], explain:"Эти формулы надо знать наизусть: их спрашивают на тестовых заданиях."},
+{id:"e014", type:"tf", q:"Верно ли: конверсии из Google Ads и Meta Ads можно складывать для получения общего числа.", answer:false, explain:"Пересекающиеся конверсии обе платформы засчитают себе."},
+{id:"e015", type:"single", q:"Что такое SQL в контексте воронки?", options:[
+ {t:"Лид, который отдел продаж посмотрел и признал годным для работы", ok:true, why:"Ключевой маркер качества трафика."},
+ {t:"Язык запросов к базе данных", why:"В маркетинговом контексте это sales qualified lead."},
+ {t:"Лид, соответствующий формальным критериям маркетинга", why:"Это MQL, предыдущая стадия."},
+ {t:"Оплативший клиент", why:"Оплата — это уже закрытая сделка."}
+], explain:"MQL отсеивает маркетинг, SQL подтверждает отдел продаж."},
+{id:"e016", type:"single", q:"Охват 8 000, показы 40 000. Чему равна частота и о чём она говорит?", options:[
+ {t:"5,0 — вероятно выгорание креатива, стоит проверить динамику CPM", ok:true, why:"Частота выше 3–4 в коротком окне означает усталость аудитории."},
+ {t:"0,2 — аудитория почти не охвачена", why:"Частота считается как показы делить на охват."},
+ {t:"5,0 — отличный показатель вовлечённости", why:"Высокая частота означает, что показывать больше некому."},
+ {t:"Частоту по этим данным посчитать нельзя", why:"Можно: показы делить на охват."}
+], explain:"40 000 / 8 000 = 5. При такой частоте растёт CPM и падает CTR."},
+{id:"e017", type:"single", q:"Владелец бизнеса просит удвоить бюджет при конверсии сайта 0,4%. Что ответить?", options:[
+ {t:"Что заказов станет вдвое больше, но и расход тоже, и сначала имеет смысл заняться страницей", ok:true, why:"Реклама масштабирует существующую экономику."},
+ {t:"Согласиться, рост бюджета всегда даёт рост результата", why:"Рост будет, но при такой конверсии он окажется убыточным."},
+ {t:"Предложить сменить платформу", why:"Проблема после клика, а не в платформе."},
+ {t:"Предложить снизить ставки", why:"Не решает проблему конверсии."}
+], explain:"Реклама умножает то, что уже есть, и не лечит слабое место после клика."},
+{id:"e018", type:"tf", q:"Верно ли: Google Ads по умолчанию относит конверсию к дате клика, а не к дате самой конверсии.", answer:true, explain:"Поэтому вчерашние данные дозаполняются несколько дней."},
+{id:"e019", type:"single", q:"Какие метрики подойдут для еженедельного отчёта владельцу интернет-магазина?", options:[
+ {t:"ROAS вместе с MER и выручкой", ok:true, why:"ROAS показывает канал, MER — общую картину."},
+ {t:"CTR и CPM", why:"Внутренние диагностические метрики."},
+ {t:"Количество показов", why:"Метрика тщеславия."},
+ {t:"Средняя позиция объявления", why:"Такой метрики в Google Ads больше нет."}
+], explain:"Владельцу нужны деньги. Внутренние метрики оставляют для собственной диагностики."},
+{id:"e020", type:"multi", q:"Какие признаки указывают на проблему с качеством трафика, а не с лендингом? Отметь все.", options:[
+ {t:"CVR высокий, но доля SQL низкая", ok:true, why:"Форму заполняют охотно, но не те люди."},
+ {t:"В отчёте по запросам много слов «бесплатно» и «своими руками»", ok:true, why:"Прямой признак нецелевого интента."},
+ {t:"CVR 0,3% при нормальном CTR", why:"Это похоже на проблему страницы или оффера."},
+ {t:"Отдел продаж говорит, что лиды из другого региона", ok:true, why:"Проблема настроек геотаргетинга."}
+], explain:"Качество трафика диагностируется по составу запросов, географии и доле SQL."},
+{id:"e021", type:"single", q:"Какой шаг медиаплана пропускают чаще всего?", options:[
+ {t:"Проверку потолка спроса в нише", ok:true, why:"План может быть верным арифметически и недостижимым физически."},
+ {t:"Расчёт бюджета", why:"Его делают все."},
+ {t:"Расчёт количества заявок", why:"Очевидный шаг."},
+ {t:"Определение цели", why:"С неё начинают."}
+], explain:"Если ниша выбирает только 600 кликов в месяц, план на 1 072 не сработает ни при каком бюджете."},
+{id:"e022", type:"single", q:"Клиент: «Google показывает 112 конверсий, а вы пишете 83. Занижаете?» Лучший ответ?", options:[
+ {t:"Объяснить окна атрибуции и view-through и сказать, какой источник для какой задачи", ok:true, why:"Спокойное объяснение снимает вопрос."},
+ {t:"Показывать цифру Google, раз она больше", why:"Завышение, за которое придётся отвечать при сверке с деньгами."},
+ {t:"Сказать, что данным Google доверять нельзя", why:"Неточно: они нужны для оптимизации кампании."},
+ {t:"Сказать, что разберётесь позже", why:"Вопрос стандартный, ответ надо знать сразу."}
+], explain:"Кабинет — для оптимизации, GA4 — для сравнения каналов, CRM — для разговора о деньгах."},
+{id:"e023", type:"single", q:"Обнаружен перерасход бюджета на середине месяца. Что нельзя делать?", options:[
+ {t:"Полностью выключать кампании до конца месяца", ok:true, why:"Обрушит обучение, в следующем месяце придётся начинать заново."},
+ {t:"Плавно снизить дневные бюджеты", why:"Это как раз правильное действие."},
+ {t:"Согласовать увеличение месячного бюджета", why:"Допустимый вариант, если результат того стоит."},
+ {t:"Пересчитать прогноз и предупредить клиента", why:"Обязательное действие."}
+], explain:"Бюджет корректируется бюджетом. Резкие остановки обходятся дороже перерасхода."},
+{id:"e024", type:"tf", q:"Верно ли: ROAS 4,0 всегда означает прибыльную кампанию.", answer:false, explain:"Всё зависит от маржи. При марже 20% безубыточность наступает только на ROAS 5,0."},
+{id:"e025", type:"single", q:"Отдел продаж говорит «лиды плохие». Первое действие?", options:[
+ {t:"Попросить разобрать последние 50 заявок и назвать общий признак негодных", ok:true, why:"Превращает эмоцию в проверяемый признак."},
+ {t:"Снизить бюджет и переписать объявления", why:"Изменения наугад."},
+ {t:"Объяснить, что качество лидов вне зоны ответственности рекламы", why:"Способ потерять клиента."},
+ {t:"Сменить цель кампании", why:"Перебор настроек без понимания причины."}
+], explain:"Задача — перевести «плохие лиды» в конкретный признак, который можно отсечь настройками."},
+{id:"e026", type:"num", q:"LTV клиента $300, целевое соотношение LTV к CAC равно 3. Какой максимальный CAC допустим?", unit:"$", answer:100, tol:1, explain:"300 / 3 = $100. Соотношение 3:1 — распространённый ориентир устойчивости."}
+]
+},
+
+/* ══════════════════ M1 ══════════════════ */
+{
+id:"m1", num:1, title:"Измерение и качество сигнала", subtitle:"GA4, GTM, UTM, конверсии", duration:"3 дня", pass:80,
+intro:"В 2026 автоматика обеих платформ принимает решения за тебя. Единственное, чем ты реально управляешь, — это данные, которые ты ей отдаёшь. Поэтому трекинг идёт раньше рекламы, а не после неё.",
+lessons:[
+
+{ id:"m1l1", title:"Почему трекинг решает всё", blocks:[
+{t:"p", x:"Раньше специалист управлял ставками, устройствами, временем показа и точными ключами. Сейчас эти рычаги либо сокращены, либо убраны. Автоматика взяла их на себя — и обучается она на конверсиях, которые ты ей передаёшь."},
+{t:"f", x:"Плохой сигнал → плохое обучение → плохой результат", note:"Никакая оптимизация не вытянет кампанию, если алгоритм учится на мусоре"},
+{t:"h", x:"Что изменилось в 2026"},
+{t:"ul", items:[
+"Google переводит кампании со старыми настройками на AI Max: с сентября 2026 автоматически апгрейдятся кампании с ACA и настройкой broad match на уровне кампании",
+"Meta с системой Andromeda определяет аудиторию по креативу, а не по настройкам таргетинга, и качество конверсионного сигнала стало прямым рычагом эффективности",
+"С 15 июня 2026 Google убрал настройку Google Signals как контроль передачи данных из GA4 в Google Ads — теперь всё решает параметр ad_storage в Consent Mode"
+]},
+{t:"warn", x:"Поломка трекинга в 2026 не выглядит как ошибка. Ничего не падает, никто не присылает уведомление. Просто конверсии тихо перестают доезжать, алгоритм слепнет, и результат ползёт вниз неделями."},
+{t:"h", x:"Из чего состоит трекинг"},
+{t:"tab", head:["Слой","Задача","Инструмент"], rows:[
+["Разметка ссылок","Пометить, откуда пришёл человек","UTM"],
+["Сбор событий","Зафиксировать, что человек сделал","GA4 + GTM"],
+["Передача в рекламу","Сообщить платформе о конверсии","Conversion tag, Pixel, CAPI"],
+["Улучшение сопоставления","Помочь платформе узнать человека","Enhanced conversions, EMQ"],
+["Согласие","Соблюсти закон и не потерять данные","Consent Mode v2"],
+["Обратная связь от бизнеса","Передать качество лида в платформу","Offline conversion import"]
+]},
+{t:"ex", title:"Что это даёт тебе на собеседовании", body:["Джуниоров с опытом «запускал рекламу» много. Людей, которые умеют поднять и починить трекинг, заметно меньше.","Это первое, что можно предложить бесплатно малому бизнесу в обмен на доступ к аккаунту — и первый пункт в любом аудите."]}
+], quiz:[
+{id:"q100", type:"single", q:"Почему качество конверсионного сигнала в 2026 важнее, чем управление ставками?", options:[
+ {t:"Ставками управляет автоматика, а обучается она на переданных ей конверсиях", ok:true, why:"Ты влияешь на вход, а не на сам процесс торгов."},
+ {t:"Ставки больше не влияют на показы", why:"Влияют, просто управляет ими алгоритм, а не ты вручную."},
+ {t:"Платформы перестали брать деньги за клики", why:"Модель оплаты не менялась."},
+ {t:"Конверсии теперь считаются автоматически без настройки", why:"Наоборот, настройка стала сложнее из-за согласий и ограничений на куки."}
+], explain:"Главный рычаг сместился с управления торгами на качество входных данных: конверсий, креативов и первичных данных."},
+{id:"q101", type:"tf", q:"Верно ли: если трекинг сломался, рекламный кабинет покажет явную ошибку.", answer:false, explain:"Типичный сбой тихий: конверсии просто перестают приходить, никаких уведомлений нет. Поэтому проверка трекинга — регулярная рутина, а не разовое дело."},
+{id:"q102", type:"multi", q:"Какие слои входят в полный конверсионный трекинг? Отметь все.", options:[
+ {t:"UTM-разметка ссылок", ok:true, why:"Без неё непонятно, откуда пришёл человек."},
+ {t:"События в GA4 через GTM", ok:true, why:"Фиксация действий на сайте."},
+ {t:"Передача конверсий в рекламные платформы", ok:true, why:"Иначе алгоритм не узнает о результате."},
+ {t:"Настройка ставок в кампании", why:"Это управление закупкой, а не измерение."}
+], explain:"Измерение и закупка — разные слои. Путаница между ними и приводит к попыткам чинить ставками то, что сломано в данных."},
+{id:"q103", type:"single", q:"Что изменилось с 15 июня 2026 в связке GA4 и Google Ads?", options:[
+ {t:"Google Signals больше не управляет передачей данных в Google Ads — это делает параметр ad_storage в Consent Mode", ok:true, why:"Если баннер согласия отдаёт сигнал неверно, конверсии и аудитории пропадают без предупреждения."},
+ {t:"GA4 перестал передавать конверсии в Google Ads", why:"Передача осталась, изменился механизм контроля."},
+ {t:"Consent Mode стал необязательным", why:"Наоборот, его роль выросла."},
+ {t:"Google Ads перешёл на собственную аналитику вместо GA4", why:"Такого перехода не было."}
+], explain:"Раньше было два контроля, теперь один. Ошибка в настройке баннера означает тихую потерю конверсий и аудиторий."}
+]},
+
+{ id:"m1l2", title:"GA4: событийная модель", blocks:[
+{t:"p", x:"GA4 устроен не так, как старая аналитика. Здесь нет сессий как контейнеров — есть поток событий. Каждое действие на сайте это событие со своими параметрами."},
+{t:"term", en:"Event", ru:"событие", d:"Любое зафиксированное действие: просмотр страницы, клик, отправка формы, прокрутка. Базовая единица данных в GA4."},
+{t:"term", en:"Parameter", ru:"параметр события", d:"Дополнительная информация внутри события: какая страница, какая кнопка, какая сумма. Без параметров события почти бесполезны."},
+{t:"term", en:"Key event", ru:"ключевое событие", d:"Событие, помеченное как важное для бизнеса. Раньше называлось conversion. Именно ключевые события передаются в Google Ads."},
+{t:"term", en:"Enhanced measurement", ru:"расширенная статистика", d:"Набор событий, которые GA4 собирает сам без настройки: просмотры страниц, прокрутка, исходящие клики, поиск по сайту, взаимодействие с видео, скачивание файлов."},
+{t:"term", en:"Data stream", ru:"поток данных", d:"Источник, из которого GA4 получает события. У каждого сайта свой поток со своим Measurement ID."},
+{t:"h", x:"Как GA4 определяет источник трафика"},
+{t:"term", en:"Source / medium", ru:"источник и канал", d:"Пара значений, описывающая происхождение визита: например google / cpc или facebook / paid_social. Основа всех отчётов по каналам."},
+{t:"term", en:"Default channel group", ru:"группа каналов по умолчанию", d:"Автоматическая классификация трафика: Paid Search, Paid Social, Organic, Direct, Email, Referral. GA4 распределяет визиты по правилам, которые зависят от корректной UTM-разметки."},
+{t:"warn", x:"Если UTM размечены неправильно, платный трафик попадёт в Organic или Referral, и весь отчёт по каналам станет бесполезным. Это самая частая находка в аудитах."},
+{t:"h", x:"Отчёты, которые реально нужны"},
+{t:"ul", items:[
+"<b>Traffic acquisition</b> — откуда приходят люди и что они делают. Основной отчёт для рекламы",
+"<b>Landing page</b> — какие страницы принимают трафик и с какой конверсией",
+"<b>Explorations</b> — конструктор произвольных отчётов, когда стандартных не хватает",
+"<b>DebugView</b> — просмотр событий в реальном времени при настройке"
+]},
+{t:"ex", title:"Проверка за 60 секунд", body:["Открыть Traffic acquisition, поставить период «вчера», найти строку google / cpc. Если её нет, а реклама крутится — UTM или автопометка настроены неверно.","Дальше проверить, что у этой строки есть ключевые события. Если сессии есть, а конверсий ноль — ломается слой ниже."]}
+], quiz:[
+{id:"q110", type:"single", q:"Чем модель GA4 принципиально отличается от старой сессионной аналитики?", options:[
+ {t:"Данные строятся из потока отдельных событий с параметрами", ok:true, why:"Сессия в GA4 — производная величина, а не контейнер."},
+ {t:"GA4 не считает посетителей", why:"Считает, просто иначе группирует данные."},
+ {t:"GA4 работает только с мобильными приложениями", why:"GA4 работает и с сайтами, и с приложениями."},
+ {t:"В GA4 нет отчётов по каналам", why:"Есть, отчёт Traffic acquisition — основной для рекламы."}
+], explain:"Событийная модель даёт гибкость, но требует от тебя самому решать, какие события собирать и какие параметры к ним прикладывать."},
+{id:"q111", type:"single", q:"Реклама крутится третий день, а в отчёте Traffic acquisition нет строки google / cpc. Что проверять первым?", options:[
+ {t:"Связку Google Ads с GA4 и автопометку, а при ручной разметке — utm_medium", ok:true, why:"Платный трафик падает не туда именно из-за разметки или отсутствия связки аккаунтов."},
+ {t:"Настройки ставок в кампании", why:"Ставки не влияют на то, как GA4 классифицирует визит."},
+ {t:"Качество объявлений", why:"Это никак не связано с отнесением трафика к каналу."},
+ {t:"Бюджет кампании", why:"Даже при малом бюджете хоть какие-то визиты были бы видны."}
+], explain:"Отсутствие канала при живой рекламе — это всегда проблема разметки или связки аккаунтов, а не самой кампании."},
+{id:"q112", type:"multi", q:"Что GA4 собирает автоматически при включённой enhanced measurement? Отметь все.", options:[
+ {t:"Прокрутку страницы", ok:true, why:"Входит в стандартный набор."},
+ {t:"Клики по внешним ссылкам", ok:true, why:"Исходящие клики отслеживаются автоматически."},
+ {t:"Отправку любой формы как ключевое событие", why:"Событие формы может собираться, но ключевым его надо пометить вручную, и надёжнее настроить свой триггер."},
+ {t:"Скачивание файлов", ok:true, why:"Тоже входит в стандартный набор."}
+], explain:"Автособираемое покрывает базу, но конверсии почти всегда требуют ручной настройки через GTM."},
+{id:"q113", type:"tf", q:"Верно ли: в GA4 любое событие автоматически считается конверсией.", answer:false, explain:"Событие нужно вручную пометить как key event. Иначе оно останется просто событием и не попадёт в Google Ads."},
+{id:"q114", type:"single", q:"Зачем нужны параметры события?", options:[
+ {t:"Чтобы отличать одно и то же событие в разных контекстах: какая форма, какая кнопка, какая сумма", ok:true, why:"Без параметров все отправки формы сольются в одну безликую цифру."},
+ {t:"Чтобы ускорить загрузку сайта", why:"К производительности параметры отношения не имеют."},
+ {t:"Чтобы событие передалось в Google Ads", why:"За передачу отвечает пометка key event и связка аккаунтов."},
+ {t:"Они нужны только для приложений", why:"Для сайтов они нужны ровно так же."}
+], explain:"Событие без параметров отвечает на вопрос «что-то произошло». С параметрами — «что именно, где и на какую сумму»."}
+]},
+
+{ id:"m1l3", title:"UTM: дисциплина разметки", blocks:[
+{t:"p", x:"UTM — это пометки в ссылке, по которым аналитика понимает, откуда пришёл человек. Технически элементарно, на практике именно здесь разваливается половина отчётов."},
+{t:"term", en:"UTM parameters", ru:"UTM-метки", d:"Набор параметров в конце ссылки после знака вопроса. Считываются GA4 и большинством систем аналитики."},
+{t:"f", x:"site.com/page?utm_source=facebook&utm_medium=paid_social&utm_campaign=spring_leadgen", note:"Параметры разделяются знаком &"},
+{t:"tab", head:["Параметр","Что означает","Пример"], rows:[
+["utm_source","Конкретная площадка","google, facebook, linkedin, newsletter"],
+["utm_medium","Тип трафика","cpc, paid_social, email, referral"],
+["utm_campaign","Название кампании","spring_leadgen_2026"],
+["utm_content","Что именно кликнули","video_a, static_b"],
+["utm_term","Ключевое слово","обычно заполняется автоматически"]
+]},
+{t:"h", x:"Правила, которые спасают отчёты"},
+{t:"ul", items:[
+"Только нижний регистр. <code>Facebook</code> и <code>facebook</code> для GA4 это два разных источника",
+"Только подчёркивания вместо пробелов. Пробел превратится в <code>%20</code> и испортит название",
+"utm_medium берётся из закрытого списка: <code>cpc</code>, <code>paid_social</code>, <code>email</code>, <code>organic_social</code>, <code>referral</code>, <code>display</code>. Отсебятина ломает группировку каналов",
+"Никогда не ставить UTM на внутренние ссылки сайта — это обнулит сессию и перезапишет источник",
+"Название кампании в UTM должно совпадать с названием в рекламном кабинете"
+]},
+{t:"term", en:"Auto-tagging", ru:"автопометка", d:"Механизм Google Ads, который сам добавляет к ссылке параметр gclid. Работает надёжнее ручных UTM и включён по умолчанию. Для Google Ads вручную UTM обычно не ставят."},
+{t:"term", en:"GCLID", ru:"идентификатор клика Google", d:"Уникальный код клика, по которому Google связывает визит с кампанией, объявлением и ключом. Основа для offline conversion import."},
+{t:"term", en:"Naming convention", ru:"соглашение об именовании", d:"Письменный документ, фиксирующий, как именуются кампании и UTM во всей команде. Скучная вещь, которая экономит десятки часов и входит в портфолио джуниора."},
+{t:"warn", x:"Меняя UTM у работающей кампании, ты разрываешь историю: старые и новые визиты попадут в разные строки отчёта. Разметку договариваются один раз в начале."}
+], quiz:[
+{id:"q120", type:"single", q:"Какой utm_medium правильный для рекламы в Meta?", options:[
+ {t:"paid_social", ok:true, why:"Стандартное значение, которое GA4 корректно относит к группе Paid Social."},
+ {t:"facebook", why:"Это источник, а не тип трафика. Должно быть в utm_source."},
+ {t:"social media ads", why:"Пробелы недопустимы, и это значение не входит в стандартный список."},
+ {t:"Paid_Social", why:"Заглавные буквы создадут отдельную строку в отчёте."}
+], explain:"utm_source — площадка, utm_medium — тип трафика из закрытого списка. Путаница между ними ломает группировку каналов."},
+{id:"q121", type:"multi", q:"Что сломает отчётность? Отметь все.", options:[
+ {t:"UTM на внутренней ссылке в меню сайта", ok:true, why:"Обнулит сессию и перезапишет источник на внутренний."},
+ {t:"Разный регистр в utm_source у разных объявлений", ok:true, why:"GA4 создаст несколько строк вместо одной."},
+ {t:"Пробелы в utm_campaign", ok:true, why:"Превратятся в %20 и испортят название."},
+ {t:"Использование utm_content для различения креативов", why:"Это как раз правильное применение параметра."}
+], explain:"Три самые частые ошибки: внутренние ссылки, регистр и пробелы. Все три лечатся одним документом с соглашением об именовании."},
+{id:"q122", type:"single", q:"Нужно ли вручную размечать UTM для кампаний в Google Ads?", options:[
+ {t:"Обычно нет — работает auto-tagging с параметром gclid", ok:true, why:"Он надёжнее ручной разметки и передаёт больше данных."},
+ {t:"Да, всегда обязательно", why:"Ручные UTM могут даже конфликтовать с автопометкой при неверной настройке."},
+ {t:"Нужно, но только utm_term", why:"Ключевое слово Google передаёт через gclid."},
+ {t:"Нужно только для поисковых кампаний", why:"Автопометка работает для всех типов кампаний Google Ads."}
+], explain:"Для Google Ads хватает auto-tagging. Ручная разметка нужна там, где своего механизма нет: рассылки, партнёры, баннеры на чужих сайтах."},
+{id:"q123", type:"single", q:"Что такое gclid и зачем он нужен на практике?", options:[
+ {t:"Идентификатор клика, по которому позже можно вернуть в Google Ads данные о качестве лида", ok:true, why:"Это основа offline conversion import."},
+ {t:"Идентификатор рекламного аккаунта", why:"Аккаунт обозначается номером Customer ID."},
+ {t:"Код отслеживания GA4 на сайте", why:"Это Measurement ID."},
+ {t:"Метка согласия на использование куки", why:"Согласие передаётся параметрами Consent Mode."}
+], explain:"Сохранив gclid в CRM вместе с лидом, ты потом сможешь сообщить Google, какие именно клики привели к сделкам."},
+{id:"q124", type:"tf", q:"Верно ли: менять UTM у уже запущенной кампании безопасно, история в отчётах не пострадает.", answer:false, explain:"Старые и новые визиты попадут в разные строки. Разметку фиксируют до запуска."}
+]},
+
+{ id:"m1l4", title:"GTM: как ставить теги без программиста", blocks:[
+{t:"p", x:"Google Tag Manager — это прослойка между сайтом и всеми системами аналитики. Один раз программист ставит на сайт контейнер, дальше ты добавляешь и меняешь теги сам."},
+{t:"term", en:"Container", ru:"контейнер", d:"Код GTM на сайте. Ставится один раз на все страницы. Всё остальное настраивается в интерфейсе."},
+{t:"term", en:"Tag", ru:"тег", d:"То, что должно сработать: отправить событие в GA4, засчитать конверсию Google Ads, вызвать Meta Pixel."},
+{t:"term", en:"Trigger", ru:"триггер", d:"Условие срабатывания тега: клик по кнопке, отправка формы, просмотр определённой страницы, появление элемента."},
+{t:"term", en:"Variable", ru:"переменная", d:"Значение, подставляемое в момент срабатывания: URL страницы, текст кнопки, сумма заказа."},
+{t:"term", en:"Data layer", ru:"слой данных", d:"Специальный массив на сайте, через который разработчики передают в GTM то, что нельзя вытащить из вёрстки: сумму заказа, id товара, статус пользователя."},
+{t:"term", en:"Preview mode", ru:"режим отладки", d:"Окно, показывающее в реальном времени, какие теги сработали и с какими значениями. Без него настраивать нельзя."},
+{t:"h", x:"Порядок работы"},
+{t:"ul", items:[
+"Определить, что считать конверсией, и записать это словами",
+"Создать переменные, которые понадобятся",
+"Создать триггер на нужное действие",
+"Создать тег и привязать к триггеру",
+"Проверить в Preview: сработало ли, один ли раз, с верными ли значениями",
+"Проверить в GA4 DebugView: дошло ли событие",
+"Опубликовать контейнер и записать изменение в журнал версий"
+]},
+{t:"warn", x:"Самая частая ошибка джуниора — триггер на «все клики» вместо конкретной кнопки. Конверсии начинают срабатывать от каждого клика на странице, данные превращаются в мусор, а алгоритм учится на нём неделями."},
+{t:"ex", title:"Как отследить отправку формы", body:["Вариант 1, лучший: после отправки пользователь попадает на страницу «спасибо». Триггер — просмотр этой страницы. Надёжно и просто.","Вариант 2: форма отправляется без перезагрузки. Тогда нужен либо триггер GTM на отправку формы, либо событие в data layer от разработчика.","Вариант 3, худший: триггер на клик по кнопке. Клик не равен успешной отправке — форма может не пройти валидацию, и ты засчитаешь конверсию, которой не было."]}
+], quiz:[
+{id:"q130", type:"single", q:"Что такое триггер в GTM?", options:[
+ {t:"Условие, при котором тег срабатывает", ok:true, why:"Тег — что делаем, триггер — когда."},
+ {t:"Код, отправляющий данные в GA4", why:"Это тег."},
+ {t:"Значение, подставляемое в тег", why:"Это переменная."},
+ {t:"Контейнер на сайте", why:"Контейнер — общая оболочка для всего."}
+], explain:"Связка простая: тег — что, триггер — когда, переменная — с какими значениями."},
+{id:"q131", type:"single", q:"Форма отправляется без перезагрузки страницы. Какой способ отслеживания самый надёжный?", options:[
+ {t:"Событие в data layer, которое разработчик отправляет после успешной отправки", ok:true, why:"Срабатывает только при реальном успехе, ложных конверсий нет."},
+ {t:"Триггер на клик по кнопке отправки", why:"Клик не гарантирует успешную отправку: форма может не пройти валидацию."},
+ {t:"Триггер на все клики на странице", why:"Даст полный мусор в данных."},
+ {t:"Таймер на 30 секунд пребывания на странице", why:"Время на странице вообще не связано с отправкой формы."}
+], explain:"Правило: конверсия фиксируется по подтверждению успеха, а не по намерению. Клик — это намерение."},
+{id:"q132", type:"multi", q:"Что нужно проверить перед публикацией контейнера? Отметь все.", options:[
+ {t:"Тег срабатывает в Preview на нужном действии", ok:true, why:"Базовая проверка."},
+ {t:"Тег срабатывает ровно один раз, а не несколько", ok:true, why:"Дубли завышают конверсии и портят обучение алгоритма."},
+ {t:"Событие видно в GA4 DebugView с правильными параметрами", ok:true, why:"GTM отправил — ещё не значит, что GA4 принял."},
+ {t:"Ставки в кампании выставлены корректно", why:"К публикации тегов отношения не имеет."}
+], explain:"Три проверки: сработало, сработало один раз, дошло с верными значениями. Публикация без них — основная причина поломанных аккаунтов."},
+{id:"q133", type:"tf", q:"Верно ли: изменения в GTM начинают работать на сайте сразу после сохранения тега.", answer:false, explain:"Изменения живут в черновике, пока контейнер не опубликован. Preview показывает их только тебе."},
+{id:"q134", type:"single", q:"Зачем нужен data layer, если GTM и так умеет читать клики и страницы?", options:[
+ {t:"Через него передаются данные, которых нет в вёрстке: сумма заказа, id товара, статус клиента", ok:true, why:"Без этого невозможно передать ценность конверсии."},
+ {t:"Он ускоряет загрузку контейнера", why:"К скорости он отношения не имеет."},
+ {t:"Он заменяет GA4", why:"Это транспорт данных, а не аналитика."},
+ {t:"Он нужен только интернет-магазинам", why:"В лидогенерации через него передают тип формы, источник лида, статус пользователя."}
+], explain:"Data layer — единственный надёжный способ получить бизнес-данные. Вытаскивать сумму заказа из текста на странице — путь к поломке при первом же редизайне."},
+{id:"q135", type:"single", q:"Ты настроил конверсию на клик по кнопке «Отправить». В отчёте 300 конверсий, в CRM 120 заявок. Причина?", options:[
+ {t:"Клик засчитывается даже когда форма не отправилась из-за ошибок валидации", ok:true, why:"Это ровно тот случай, когда намерение считается за результат."},
+ {t:"CRM теряет заявки", why:"Возможно, но разрыв в 2,5 раза указывает на переучёт в трекинге."},
+ {t:"Google завышает конверсии намеренно", why:"Платформа считает то, что ты ей передал."},
+ {t:"Нормальная погрешность атрибуции", why:"Погрешность атрибуции не даёт разницы в 2,5 раза на одном и том же событии."}
+], explain:"Классика. Лечится переносом триггера на страницу благодарности или на событие успешной отправки в data layer."}
+]},
+
+{ id:"m1l5", title:"Конверсии в рекламных платформах", blocks:[
+{t:"p", x:"GA4 видит, что произошло на сайте. Но чтобы алгоритм учился, конверсию нужно донести до самой платформы, и сделать это так, чтобы она смогла связать событие с конкретным человеком."},
+{t:"h", x:"Google Ads"},
+{t:"term", en:"Conversion action", ru:"конверсионное действие", d:"Настроенная в Google Ads цель. Может импортироваться из GA4 или создаваться нативным тегом. Одно и то же действие нельзя считать обоими способами — получится двойной учёт."},
+{t:"term", en:"Enhanced conversions", ru:"улучшенные конверсии", d:"Передача хешированных first-party данных клиента — email, телефон, адрес — вместе с событием конверсии. Google сопоставляет их со своими залогиненными пользователями и восстанавливает конверсии, которые иначе потерялись бы из-за ограничений на куки. Рекламодатели обычно видят рост учтённых конверсий на 5–15%."},
+{t:"term", en:"Primary / secondary conversion", ru:"основная и вспомогательная конверсия", d:"Основные участвуют в обучении ставок, вспомогательные только наблюдаются. Мусорные события держат во вспомогательных."},
+{t:"h", x:"Meta"},
+{t:"term", en:"Meta Pixel", ru:"пиксель Meta", d:"Код на сайте, передающий события в Meta из браузера пользователя. Уязвим к блокировщикам и ограничениям браузеров."},
+{t:"term", en:"CAPI — Conversions API", ru:"серверная передача конверсий", d:"Передача тех же событий с сервера, минуя браузер. В 2026 стандарт — держать Pixel и CAPI одновременно: браузерный и серверный потоки дополняют друг друга, Meta дедуплицирует события по общему id."},
+{t:"term", en:"EMQ — Event Match Quality", ru:"качество сопоставления событий", d:"Оценка Meta от 1 до 10, показывающая, насколько хорошо она может связать твои события с реальными людьми. Ориентир — выше 7. Растёт от передачи email, телефона, имени, города в хешированном виде."},
+{t:"h", x:"Согласие и обратная связь"},
+{t:"term", en:"Consent Mode v2", ru:"режим согласия", d:"Механизм, сообщающий тегам Google статус согласия пользователя. Юридически обязателен при показах в ЕЭЗ и Великобритании. Ключевой параметр — ad_storage."},
+{t:"term", en:"Offline conversion import", ru:"импорт офлайн-конверсий", d:"Загрузка обратно в Google Ads данных о том, какие лиды стали сделками, по сохранённому gclid. Позволяет алгоритму оптимизироваться на деньги, а не на заявки."},
+{t:"ex", title:"Цепочка в лидогенерации целиком", body:["Человек кликает объявление → в ссылке приходит gclid → форма сохраняет gclid скрытым полем вместе с контактом → лид попадает в CRM с этим gclid → через месяц сделка закрывается → выгрузка сделок с gclid и суммой загружается обратно в Google Ads.","С этого момента алгоритм оптимизируется не на количество заявок, а на выручку. Это главный приём, отличающий сильного лидогенщика."]},
+{t:"warn", x:"Не считай одно действие дважды: нативным тегом Google Ads и импортом того же события из GA4. Конверсии удвоятся, а автоматика начнёт переплачивать."}
+], quiz:[
+{id:"q140", type:"single", q:"Что делают enhanced conversions?", options:[
+ {t:"Передают хешированные контактные данные вместе с конверсией, чтобы Google сопоставил её с пользователем", ok:true, why:"Обычно даёт 5–15% дополнительных учтённых конверсий."},
+ {t:"Увеличивают количество реальных конверсий", why:"Они восстанавливают учёт уже случившихся конверсий, а не создают новые."},
+ {t:"Передают конверсии в GA4 вместо Google Ads", why:"Это механизм именно Google Ads."},
+ {t:"Заменяют Consent Mode", why:"Согласие регулируется отдельно и остаётся обязательным."}
+], explain:"Данные передаются в хешированном виде, то есть Google не получает открытый email. Это восстановление учёта, а не рост продаж."},
+{id:"q141", type:"single", q:"Зачем держать Pixel и CAPI одновременно, если они передают одни и те же события?", options:[
+ {t:"Браузерный поток теряется из-за блокировщиков, серверный его страхует; Meta дедуплицирует события", ok:true, why:"Два потока дают более полный сигнал, чем любой по отдельности."},
+ {t:"Чтобы получить вдвое больше конверсий в отчёте", why:"События дедуплицируются по общему id, удвоения не будет."},
+ {t:"CAPI работает только для e-commerce", why:"CAPI используется и в лидогенерации."},
+ {t:"Pixel устарел и скоро отключится", why:"Отключения не заявлено, он остаётся частью связки."}
+], explain:"Дедупликация работает по общему event_id, который должны передавать оба потока. Если его не настроить, события действительно задвоятся."},
+{id:"q142", type:"num", q:"Какой минимальный показатель EMQ считается ориентиром нормы в Meta?", unit:"из 10", answer:7, tol:0.01, hint:"Оценка идёт по десятибалльной шкале.", explain:"Ориентир — выше 7. Ниже этого алгоритм плохо связывает события с людьми и оптимизируется вслепую."},
+{id:"q143", type:"multi", q:"Что повышает EMQ? Отметь все.", options:[
+ {t:"Передача хешированного email", ok:true, why:"Один из сильнейших идентификаторов."},
+ {t:"Передача хешированного номера телефона", ok:true, why:"Тоже сильный идентификатор."},
+ {t:"Одновременная работа Pixel и CAPI", ok:true, why:"Больше полных событий с параметрами."},
+ {t:"Увеличение дневного бюджета", why:"Бюджет не влияет на качество сопоставления."}
+], explain:"EMQ растёт от количества и качества переданных идентификаторов, а не от объёма трафика."},
+{id:"q144", type:"single", q:"Зачем нужен offline conversion import в лидогенерации?", options:[
+ {t:"Чтобы вернуть в Google Ads информацию о том, какие лиды стали сделками, и оптимизироваться на деньги", ok:true, why:"Алгоритм перестаёт гнаться за дешёвыми заявками."},
+ {t:"Чтобы загрузить список ключевых слов", why:"Это делается в интерфейсе кампании."},
+ {t:"Чтобы выгрузить отчёт в Excel", why:"Импорт работает в обратную сторону — данные загружаются в Google."},
+ {t:"Чтобы отключить неэффективные объявления", why:"Отключение — отдельное действие, к импорту отношения не имеет."}
+], explain:"Это способ соединить рекламу с реальной выручкой. Требует сохранения gclid вместе с лидом на этапе формы."},
+{id:"q145", type:"tf", q:"Верно ли: одно и то же действие можно одновременно считать нативным тегом Google Ads и импортом из GA4.", answer:false, explain:"Получится двойной учёт: алгоритм решит, что конверсий вдвое больше, и начнёт переплачивать. Нужно выбрать один способ."},
+{id:"q146", type:"single", q:"Сайт показывает рекламу на ЕС. Consent Mode настроен неверно и ad_storage не передаётся. Что произойдёт?", options:[
+ {t:"Конверсии, аудитории и сигналы для Smart Bidding начнут тихо пропадать", ok:true, why:"С июня 2026 ad_storage — единственный шлюз передачи данных из GA4 в Google Ads."},
+ {t:"Google покажет ошибку и остановит кампанию", why:"Никакой остановки не происходит, сбой тихий."},
+ {t:"Ничего не изменится, Consent Mode нужен только для отчётности", why:"Он напрямую управляет передачей данных в рекламу."},
+ {t:"Вырастет CPC, но конверсии сохранятся", why:"Проблема именно в потере конверсионных данных."}
+], explain:"Самый неприятный тип поломки: ничего не падает, результат просто медленно ухудшается неделями."}
+]}
+
+], exam:[
+{id:"e100", type:"single", q:"Почему в 2026 трекинг изучают раньше самих рекламных платформ?", options:[
+ {t:"Автоматика принимает решения на основе переданных ей конверсий — управляешь ты входом, а не торгами", ok:true, why:"Классические ручные рычаги сокращены или убраны."},
+ {t:"Потому что платформы перестали работать без GA4", why:"Реклама запускается и без аналитики, просто вслепую."},
+ {t:"Это требование законодательства", why:"Закон регулирует согласие, а не порядок обучения."},
+ {t:"Так быстрее получить сертификат", why:"К сертификации порядок изучения отношения не имеет."}
+], explain:"Смена рычагов — ключевая мысль модуля: качество входных данных стало важнее ручных настроек."},
+{id:"e101", type:"single", q:"Правильный набор UTM для рекламной кампании в Meta:", options:[
+ {t:"utm_source=facebook&utm_medium=paid_social&utm_campaign=spring_leadgen", ok:true, why:"Площадка в source, тип трафика в medium, всё в нижнем регистре без пробелов."},
+ {t:"utm_source=paid_social&utm_medium=facebook&utm_campaign=Spring LeadGen", why:"Source и medium перепутаны, плюс пробел и заглавные буквы."},
+ {t:"utm_source=Facebook&utm_medium=CPC&utm_campaign=spring", why:"Заглавные буквы создадут дубли, cpc обычно резервируют за поисковой рекламой."},
+ {t:"utm_medium=facebook ads&utm_campaign=spring", why:"Отсутствует source, в medium пробел и неверное значение."}
+], explain:"Source — где показали, medium — какого типа трафик, всё строчными без пробелов."},
+{id:"e102", type:"tf", q:"Верно ли: для кампаний Google Ads обычно достаточно auto-tagging и ручные UTM не нужны.", answer:true, explain:"Auto-tagging передаёт gclid, который несёт больше данных, чем ручная разметка."},
+{id:"e103", type:"single", q:"В GTM настроен тег конверсии с триггером «все клики». Чем это плохо?", options:[
+ {t:"Конверсия засчитывается от любого клика на странице, данные превращаются в мусор", ok:true, why:"Алгоритм неделями учится на ложном сигнале."},
+ {t:"Замедляется загрузка сайта", why:"Проблема не в скорости, а в достоверности данных."},
+ {t:"Тег не будет работать в мобильных браузерах", why:"Работать будет, в этом и беда."},
+ {t:"GA4 отклонит такие события", why:"GA4 примет всё, что ему отправят."}
+], explain:"Триггер должен указывать на конкретное подтверждённое действие, а не на любой клик."},
+{id:"e104", type:"multi", q:"Что нужно проверить перед публикацией контейнера GTM? Отметь все.", options:[
+ {t:"Срабатывание в Preview на нужном действии", ok:true, why:"Первая и обязательная проверка."},
+ {t:"Отсутствие повторных срабатываний", ok:true, why:"Дубли завышают конверсии."},
+ {t:"Приход события в GA4 DebugView с корректными параметрами", ok:true, why:"Подтверждает, что данные дошли."},
+ {t:"Совпадение названия тега с названием кампании", why:"Полезно для порядка, но на работу не влияет и обязательным не является."}
+], explain:"Три обязательные проверки — сработало, один раз, дошло верно."},
+{id:"e105", type:"single", q:"Meta показывает EMQ 4,2 по событию Lead. Что делать?", options:[
+ {t:"Добавить передачу хешированных email и телефона и подключить CAPI", ok:true, why:"EMQ растёт от количества и качества идентификаторов."},
+ {t:"Увеличить бюджет, чтобы набрать больше событий", why:"Объём не влияет на качество сопоставления."},
+ {t:"Сменить цель кампании на клики", why:"Это отказ от оптимизации на конверсии, а не решение проблемы."},
+ {t:"Ничего, 4,2 это нормальный показатель", why:"Ориентир — выше 7."}
+], explain:"Низкий EMQ означает, что Meta плохо связывает события с людьми, и алгоритм работает вслепую."},
+{id:"e106", type:"single", q:"Что произойдёт, если одно действие считать и нативным тегом Google Ads, и импортом того же события из GA4?", options:[
+ {t:"Конверсии задвоятся, автоматика решит, что результат вдвое лучше, и начнёт переплачивать", ok:true, why:"Классическая ошибка при переносе трекинга."},
+ {t:"Google автоматически дедуплицирует", why:"Дедупликации между этими двумя источниками нет."},
+ {t:"Одна из конверсий просто не запишется", why:"Запишутся обе."},
+ {t:"Ничего, это рекомендуемая практика для надёжности", why:"Рекомендация прямо обратная: выбрать один способ."}
+], explain:"Выбирается либо нативный тег, либо импорт из GA4 — но не оба для одного действия."},
+{id:"e107", type:"tf", q:"Верно ли: GA4 автоматически считает конверсией любое событие, в названии которого есть слово lead.", answer:false, explain:"Событие нужно вручную пометить как key event. Название роли не играет."},
+{id:"e108", type:"single", q:"Для чего в форме сохраняют gclid скрытым полем?", options:[
+ {t:"Чтобы позже вернуть в Google Ads данные о том, какие клики привели к сделкам", ok:true, why:"Это обязательное условие для offline conversion import."},
+ {t:"Чтобы ускорить отправку формы", why:"К производительности отношения не имеет."},
+ {t:"Чтобы выполнить требования GDPR", why:"Согласие регулируется отдельным механизмом."},
+ {t:"Чтобы GA4 корректно определил источник", why:"GA4 читает gclid из ссылки сам."}
+], explain:"Gclid, доехавший до CRM вместе с лидом, — связующее звено между рекламой и реальными деньгами."},
+{id:"e109", type:"multi", q:"Какие признаки указывают на поломанный трекинг? Отметь все.", options:[
+ {t:"В Traffic acquisition нет строки google / cpc при работающей рекламе", ok:true, why:"Проблема разметки или связки аккаунтов."},
+ {t:"Конверсий в кабинете в 2,5 раза больше, чем заявок в CRM", ok:true, why:"Похоже на срабатывание тега от клика, а не от успешной отправки."},
+ {t:"Конверсии резко обнулились после обновления сайта", ok:true, why:"При редизайне часто ломаются селекторы и триггеры."},
+ {t:"CPC вырос на 12% за месяц", why:"Обычное колебание аукциона, к трекингу отношения не имеет."}
+], explain:"Трекинг диагностируется по расхождениям между системами и по резким обрывам, а не по колебаниям цены клика."},
+{id:"e110", type:"single", q:"Что такое primary conversion в Google Ads?", options:[
+ {t:"Конверсия, участвующая в обучении ставок", ok:true, why:"Вспомогательные только наблюдаются и на торги не влияют."},
+ {t:"Первая конверсия пользователя", why:"Порядковый номер тут ни при чём."},
+ {t:"Самая дорогая конверсия в аккаунте", why:"Стоимость не определяет статус."},
+ {t:"Конверсия, импортированная из GA4", why:"Источник импорта не определяет статус."}
+], explain:"Разделение на primary и secondary — главный инструмент управления тем, чему учится алгоритм."},
+{id:"e111", type:"single", q:"Наиболее надёжный способ отследить отправку формы без перезагрузки страницы:", options:[
+ {t:"Событие в data layer, отправляемое после подтверждённого успеха", ok:true, why:"Срабатывает только при реальной отправке."},
+ {t:"Триггер на клик по кнопке", why:"Клик не гарантирует успех: валидация может не пройти."},
+ {t:"Триггер на прокрутку до низа страницы", why:"Прокрутка никак не связана с отправкой."},
+ {t:"Enhanced measurement в GA4", why:"Автособираемые события ненадёжны для конверсий на кастомных формах."}
+], explain:"Правило одно: фиксируем подтверждённый результат, а не намерение."},
+{id:"e112", type:"tf", q:"Верно ли: Consent Mode нужен только для юридического соответствия и на результат рекламы не влияет.", answer:false, explain:"С 15 июня 2026 параметр ad_storage — единственный шлюз передачи данных из GA4 в Google Ads. Ошибка в нём тихо обнуляет конверсии и аудитории."},
+{id:"e113", type:"single", q:"В каком порядке правильно строить измерение с нуля?", options:[
+ {t:"Определить конверсии словами → разметка → GA4 и GTM → передача в платформы → улучшение сопоставления → обратная связь из CRM", ok:true, why:"Каждый слой опирается на предыдущий."},
+ {t:"Запустить рекламу → посмотреть результат → настроить аналитику", why:"Первые недели открутятся вслепую, а алгоритм обучится на пустоте."},
+ {t:"Настроить enhanced conversions → потом всё остальное", why:"Улучшать нечего, пока нет базового события."},
+ {t:"Подключить CRM → потом GA4", why:"CRM подключают последней, когда уже есть что в неё передавать."}
+], explain:"Порядок важен: сначала договорённость о том, что считать результатом, потом техника."},
+{id:"e114", type:"num", q:"Какой примерный прирост учтённых конверсий обычно дают enhanced conversions? Укажи нижнюю границу типичного диапазона в процентах.", unit:"%", answer:5, tol:0.5, explain:"Типичный диапазон — от 5% до 15% дополнительных учтённых конверсий."},
+{id:"e115", type:"single", q:"Чем отличается Meta Pixel от CAPI?", options:[
+ {t:"Pixel передаёт события из браузера, CAPI — с сервера; вместе они дают более полный сигнал", ok:true, why:"Серверный поток не зависит от блокировщиков."},
+ {t:"Pixel для лидогенерации, CAPI для e-commerce", why:"Оба применяются в любых нишах."},
+ {t:"CAPI — это новая версия Pixel, старый надо удалять", why:"Рекомендуется держать оба одновременно."},
+ {t:"Pixel платный, CAPI бесплатный", why:"Оба бесплатны."}
+], explain:"Главное — настроить общий event_id, иначе события задвоятся вместо дедупликации."}
+]
+},
+
+/* ══════════════════ M2 ══════════════════ */
+{
+id:"m2", num:2, title:"Google Ads: поисковая реклама", subtitle:"Структура, ключи, ставки, AI Max", duration:"5 дней", pass:80,
+intro:"Самый большой модуль курса. Поисковая реклама — ядро профессии PPC-специалиста и первое, что спрашивают на собеседовании. Отдельное внимание AI Max: миграция идёт прямо сейчас, и знание её деталей резко отличает тебя от кандидатов, учившихся по прошлогодним материалам.",
+lessons:[
+
+{ id:"m2l1", title:"Аукцион и структура аккаунта", blocks:[
+{t:"p", x:"Место в выдаче покупается не деньгами, а сочетанием денег и качества. Понимание аукциона объясняет, почему у конкурента с меньшей ставкой объявление выше твоего."},
+{t:"term", en:"Ad Rank", ru:"рейтинг объявления", d:"Итоговая оценка, определяющая позицию в выдаче и сам факт показа. Складывается из ставки, качества объявления и страницы, ожидаемого влияния расширений и контекста запроса."},
+{t:"term", en:"Quality Score", ru:"показатель качества", d:"Оценка от 1 до 10 на уровне ключевого слова. Складывается из трёх частей: ожидаемый CTR, релевантность объявления запросу и опыт на целевой странице. Диагностический инструмент, а не KPI."},
+{t:"f", x:"Высокое качество → дешевле клик при той же позиции", note:"Улучшение релевантности — самый дешёвый способ снизить CPC"},
+{t:"h", x:"Структура аккаунта"},
+{t:"tab", head:["Уровень","Что задаётся здесь","Практическое правило"], rows:[
+["Account","Общие настройки, биллинг, конверсии","Один бизнес — один аккаунт"],
+["Campaign","Бюджет, геотаргетинг, язык, стратегия ставок, тип кампании","Разделять то, что нужно разделить по бюджету или региону"],
+["Ad group","Набор тесно связанных ключей и объявлений к ним","Одна тема — одна группа"],
+["Keyword / Ad","Сами запросы и тексты объявлений","Объявление должно отвечать на запрос группы"]
+]},
+{t:"warn", x:"Типичная ошибка новичка — плодить сотни кампаний «для контроля». В 2026 автоматике нужен объём данных: дробление бюджета замедляет обучение и ухудшает результат. Разделяй только по реальной причине: отдельный бюджет, отдельный регион, отдельная цель."},
+{t:"h", x:"Разделение бренда и небренда"},
+{t:"p", x:"Запросы с названием компании и запросы без него — это разный трафик с разной ценой и разной конверсией. Смешивать их в одной кампании значит получить красивую среднюю цифру, за которой ничего не видно."},
+{t:"ex", title:"Почему это важно на собеседовании", body:["Бренд конвертируется в разы лучше и стоит копейки: люди уже вас ищут. Небренд дороже и холоднее.","В одной кампании общий CPA выглядит отличным за счёт бренда, и небрендовая часть, которая реально приводит новых клиентов, остаётся незамеченной. Вопрос «как вы разделяете бренд и небренд» — стандартный на интервью."]}
+], quiz:[
+{id:"q200", type:"single", q:"Из чего складывается Ad Rank?", options:[
+ {t:"Ставка, качество объявления и страницы, влияние расширений и контекст запроса", ok:true, why:"Деньги — только одна из составляющих."},
+ {t:"Только размер ставки", why:"Тогда выдачу выкупали бы исключительно деньгами."},
+ {t:"Бюджет кампании", why:"Бюджет определяет, сколько показов ты сможешь купить, а не позицию в аукционе."},
+ {t:"Количество ключевых слов в группе", why:"На аукцион это не влияет."}
+], explain:"Именно поэтому объявление с меньшей ставкой может стоять выше: его качество и релевантность компенсируют разницу."},
+{id:"q201", type:"single", q:"Quality Score упал с 8 до 4 на группе ключей. Что проверять?", options:[
+ {t:"Соответствие объявлений запросам и релевантность целевой страницы", ok:true, why:"Это две из трёх составляющих показателя."},
+ {t:"Размер дневного бюджета", why:"Бюджет в расчёт показателя качества не входит."},
+ {t:"Настройки биллинга", why:"К качеству отношения не имеют."},
+ {t:"Количество кампаний в аккаунте", why:"Структура аккаунта на показатель качества напрямую не влияет."}
+], explain:"Три составляющие: ожидаемый CTR, релевантность объявления и опыт на целевой странице. Падение почти всегда означает, что изменилась страница или расширился состав запросов."},
+{id:"q202", type:"tf", q:"Верно ли: в 2026 чем больше кампаний в аккаунте, тем лучше контроль и результат.", answer:false, explain:"Дробление размывает данные и замедляет обучение автоматики. Разделять кампании нужно только по реальной причине: бюджет, регион, цель."},
+{id:"q203", type:"single", q:"Зачем разделять брендовые и небрендовые запросы по разным кампаниям?", options:[
+ {t:"У них разная цена и конверсия; в общей куче небрендовая часть прячется за дешёвым брендом", ok:true, why:"Иначе средний CPA красивый, а откуда новые клиенты — непонятно."},
+ {t:"Google требует такого разделения", why:"Технического требования нет, это практика."},
+ {t:"Брендовые запросы нельзя рекламировать в одной кампании с другими", why:"Технически можно, но управлять будет невозможно."},
+ {t:"Чтобы получить больше показов", why:"Разделение не увеличивает объём трафика."}
+], explain:"Разделение даёт раздельные бюджеты и честную оценку каждой части. Это стандартный вопрос на собеседовании."},
+{id:"q204", type:"single", q:"На каком уровне задаётся дневной бюджет?", options:[
+ {t:"Кампания", ok:true, why:"Бюджет, гео, язык и стратегия ставок живут на уровне кампании."},
+ {t:"Группа объявлений", why:"Здесь задаются ключи и объявления."},
+ {t:"Ключевое слово", why:"На этом уровне может быть ставка, но не бюджет."},
+ {t:"Аккаунт", why:"На уровне аккаунта есть общий лимит расхода, но обычный дневной бюджет задаётся в кампании."}
+], explain:"Знание, что где настраивается, — базовый вопрос на тестовом задании."}
+]},
+
+{ id:"m2l2", title:"Ключевые слова и типы соответствия", blocks:[
+{t:"p", x:"Ключевое слово в 2026 — это не точное совпадение, а сигнал о намерении. Google трактует его всё шире, и работа специалиста сместилась от подбора ключей к контролю того, что Google подобрал сам."},
+{t:"term", en:"Broad match", ru:"широкое соответствие", d:"Максимально свободная трактовка. Google показывает объявление по запросам, которые считает связанными по смыслу, даже без общих слов. Даёт объём, но требует жёсткого контроля."},
+{t:"term", en:"Phrase match", ru:"фразовое соответствие", d:"Записывается в кавычках. Запрос должен содержать смысл ключа, допускаются слова до и после. Компромисс между объёмом и контролем."},
+{t:"term", en:"Exact match", ru:"точное соответствие", d:"Записывается в квадратных скобках. Самый узкий тип, но и он допускает близкие варианты и синонимы. Абсолютной точности не существует."},
+{t:"term", en:"Negative keywords", ru:"минус-слова", d:"Список слов, при появлении которых в запросе объявление не показывается. Главный инструмент контроля над автоматикой: чем шире Google трактует ключи, тем важнее минус-слова."},
+{t:"term", en:"Search terms report", ru:"отчёт по поисковым запросам", d:"Показывает реальные запросы людей, по которым сработали объявления, в отличие от ключей, которые ты задал. Обязателен к просмотру еженедельно."},
+{t:"warn", x:"Ключевые слова — то, что ты купил. Search terms — то, что ты получил. Разница между ними и есть поле работы."},
+{t:"h", x:"Как работать с отчётом по запросам"},
+{t:"ul", items:[
+"Отсортировать по расходу и посмотреть верхние 30–50 строк",
+"Нецелевые запросы отправить в минус-слова: сразу решить, на уровне группы или кампании",
+"Хорошо работающие запросы, которых нет среди ключей, добавить как отдельные ключи",
+"Обратить внимание на повторяющиеся паттерны: «бесплатно», «своими руками», «вакансии», «отзывы», названия конкурентов"
+]},
+{t:"h", x:"Типовые списки минус-слов"},
+{t:"tab", head:["Категория","Примеры","Когда нужно"], rows:[
+["Бесплатное","free, бесплатно, скачать, бесплатный","Почти всегда в услугах"],
+["Самостоятельное","diy, своими руками, как сделать самому","Услуги, где ищут инструкции"],
+["Трудоустройство","jobs, вакансии, зарплата, резюме","Почти всегда"],
+["Обучение","курсы, обучение, что такое","Если не продаёшь обучение"],
+["Конкуренты","названия брендов","Зависит от стратегии"]
+]},
+{t:"ex", title:"Задача из реального аудита", body:["Аккаунт стоматологии, 30% расхода уходит на запросы вида «стоматолог зарплата», «работа стоматологом», «стоматология обучение».","Причина: broad match без списка минус-слов. Лечение — список из 40 слов и еженедельная чистка. Экономия — треть бюджета в первый же месяц."]}
+], quiz:[
+{id:"q210", type:"single", q:"Чем search terms отличаются от keywords?", options:[
+ {t:"Keywords — что ты задал, search terms — что люди реально искали", ok:true, why:"Разница между ними — основное поле работы специалиста."},
+ {t:"Это одно и то же, просто разные отчёты", why:"Совпадают они крайне редко, особенно при broad match."},
+ {t:"Search terms — это минус-слова", why:"Минус-слова формируются на основе отчёта, но это не одно и то же."},
+ {t:"Keywords используются только в Meta", why:"Ключевые слова — механика поисковой рекламы Google."}
+], explain:"Отчёт по запросам — главный источник правды о том, куда на самом деле уходят деньги."},
+{id:"q211", type:"single", q:"Как записывается phrase match?", options:[
+ {t:"В кавычках: \"ремонт холодильников\"", ok:true, why:"Кавычки означают фразовое соответствие."},
+ {t:"В квадратных скобках: [ремонт холодильников]", why:"Это exact match."},
+ {t:"Без знаков: ремонт холодильников", why:"Так записывается broad match."},
+ {t:"С плюсами: +ремонт +холодильников", why:"Модификатор широкого соответствия больше не поддерживается."}
+], explain:"Кавычки — фраза, скобки — точное, без знаков — широкое. Простое, но обязательное знание."},
+{id:"q212", type:"multi", q:"В отчёте по запросам обнаружены: «купить кондиционер», «кондиционер своими руками», «кондиционер вакансии», «установка кондиционера цена». Какие идут в минус-слова? Отметь все.", options:[
+ {t:"«своими руками»", ok:true, why:"Человек ищет инструкцию, а не услугу."},
+ {t:"«вакансии»", ok:true, why:"Ищет работу, а не покупку."},
+ {t:"«купить кондиционер»", why:"Прямой коммерческий интент, это целевой запрос."},
+ {t:"«установка кондиционера цена»", why:"Запрос с ценой — сильный коммерческий сигнал."}
+], explain:"Минусуют интент, а не отдельные слова. Полезно минусовать сразу паттерн: не «кондиционер вакансии», а просто «вакансии»."},
+{id:"q213", type:"tf", q:"Верно ли: exact match гарантирует показ только по точной формулировке ключа.", answer:false, explain:"Даже exact match допускает близкие варианты, синонимы и перестановки. Абсолютной точности в Google Ads больше нет."},
+{id:"q214", type:"single", q:"Почему роль минус-слов в 2026 выросла?", options:[
+ {t:"Google трактует ключи всё шире, и отсечение лишнего стало основным ручным рычагом", ok:true, why:"Автоматика расширяет охват, минус-слова его сужают обратно."},
+ {t:"Минус-слова стали дешевле", why:"Они всегда были бесплатны."},
+ {t:"Google требует минимум 100 минус-слов в кампании", why:"Такого требования нет."},
+ {t:"Они повышают ставку в аукционе", why:"На ставку они не влияют."}
+], explain:"Когда автоматика забирает рычаги управления, остаются два: что считать конверсией и что запретить показывать."},
+{id:"q215", type:"single", q:"На каком уровне лучше добавить минус-слово «вакансии»?", options:[
+ {t:"На уровне кампании или общего списка минус-слов аккаунта", ok:true, why:"Запрос нецелевой для всех групп сразу."},
+ {t:"На уровне одной группы объявлений", why:"Придётся повторять для каждой группы и обязательно где-то забудешь."},
+ {t:"На уровне ключевого слова", why:"Минус-слова не задаются на уровне ключа."},
+ {t:"Не добавлять, а понизить ставку", why:"Ставкой нецелевой трафик не отсекается, только удорожается."}
+], explain:"Универсальный мусор — на уровне кампании или в общий список. Точечные исключения — на уровне группы."}
+]},
+
+{ id:"m2l3", title:"Объявления и ассеты", blocks:[
+{t:"p", x:"Объявление в поиске — это не текст, а конструктор. Google сам собирает комбинации из твоих заготовок под каждый конкретный запрос."},
+{t:"term", en:"RSA — responsive search ad", ru:"адаптивное поисковое объявление", d:"Основной формат. Ты даёшь до 15 заголовков и до 4 описаний, Google подбирает сочетания под запрос и пользователя."},
+{t:"term", en:"Headline", ru:"заголовок", d:"До 30 символов. Одновременно показывается обычно 2–3 заголовка."},
+{t:"term", en:"Description", ru:"описание", d:"До 90 символов. Показывается обычно 1–2."},
+{t:"term", en:"Pinning", ru:"закрепление", d:"Принудительная фиксация заголовка на определённой позиции. Нужна там, где формулировка обязательна: юридические оговорки, название бренда. Сужает количество комбинаций, поэтому применяется точечно."},
+{t:"term", en:"Assets", ru:"ассеты, бывшие расширения", d:"Дополнительные элементы объявления: sitelinks, callouts, structured snippets, звонок, изображения, цены. Увеличивают площадь объявления и влияют на Ad Rank."},
+{t:"h", x:"Как писать заголовки"},
+{t:"ul", items:[
+"Первые 3–5 заголовков должны содержать ключевую фразу группы в разных формулировках",
+"Дальше идут выгоды: сроки, гарантия, цена, география, социальное доказательство",
+"Обязательно должен быть заголовок с прямым призывом к действию",
+"Заголовки не должны дублировать друг друга по смыслу — Google не сможет собирать разные комбинации",
+"Длину использовать почти полностью: заголовок в 12 символов теряет место в выдаче"
+]},
+{t:"term", en:"Message match", ru:"соответствие сообщения", d:"Совпадение обещания в объявлении с тем, что человек видит на странице. Разрыв здесь убивает конверсию сильнее любых настроек."},
+{t:"ex", title:"Разбор группы «ремонт посудомоечных машин»", body:["Плохо: «Ремонт техники в городе. Быстро и качественно. Звоните!» — нет ключа, нет конкретики, нет отличия от всех остальных.","Хорошо: заголовки «Ремонт посудомоечных машин», «Мастер приедет сегодня», «Гарантия 12 месяцев», «Диагностика бесплатно при ремонте», «Вызвать мастера онлайн».","Страница приземления при этом должна называться «Ремонт посудомоечных машин», а не «Услуги компании»."]},
+{t:"warn", x:"Если запрос, объявление и заголовок страницы говорят о разном, человек уходит за 3 секунды. Ты платишь за клик и не получаешь ничего."}
+], quiz:[
+{id:"q220", type:"single", q:"Сколько заголовков можно загрузить в RSA?", options:[
+ {t:"До 15", ok:true, why:"И до 4 описаний."},
+ {t:"До 3", why:"Три показываются одновременно, но загрузить можно больше."},
+ {t:"До 30", why:"30 — это лимит символов в одном заголовке."},
+ {t:"Без ограничений", why:"Лимит есть: 15 заголовков и 4 описания."}
+], explain:"15 заголовков по 30 символов и 4 описания по 90. Из них Google собирает комбинации под конкретный запрос."},
+{id:"q221", type:"single", q:"Когда оправдано использовать pinning?", options:[
+ {t:"Когда формулировка обязательна: юридическая оговорка или точное название бренда", ok:true, why:"Во всех остальных случаях закрепление только сужает возможности подбора."},
+ {t:"Всегда, чтобы контролировать текст полностью", why:"Полное закрепление лишает формат смысла и обычно ухудшает результат."},
+ {t:"Никогда, это устаревший приём", why:"В регулируемых нишах без него не обойтись."},
+ {t:"Только в брендовых кампаниях", why:"Ограничение не по типу кампании, а по необходимости точной формулировки."}
+], explain:"Правило: закрепляй только то, что обязано звучать дословно."},
+{id:"q222", type:"multi", q:"Что улучшает RSA? Отметь все.", options:[
+ {t:"Ключевая фраза группы в нескольких первых заголовках", ok:true, why:"Повышает релевантность запросу."},
+ {t:"Разные по смыслу заголовки, а не перефразировки одного", ok:true, why:"Даёт Google материал для разных комбинаций."},
+ {t:"Использование почти всей доступной длины", ok:true, why:"Короткие заголовки теряют место в выдаче."},
+ {t:"Закрепление всех 15 заголовков на фиксированных позициях", why:"Полностью лишает формат гибкости."}
+], explain:"Формат живёт за счёт разнообразия заготовок. Задача — дать хороший материал, а не пытаться собрать объявление вручную."},
+{id:"q223", type:"tf", q:"Верно ли: message match важнее, чем количество заголовков в объявлении.", answer:true, explain:"Разрыв между обещанием в объявлении и содержанием страницы убивает конверсию сильнее любых настроек объявления."},
+{id:"q224", type:"single", q:"Зачем нужны sitelinks и callouts?", options:[
+ {t:"Увеличивают площадь объявления, дают дополнительные точки входа и влияют на Ad Rank", ok:true, why:"Ожидаемое влияние расширений входит в расчёт рейтинга."},
+ {t:"Снижают цену клика напрямую", why:"Напрямую нет, но через рост CTR и Ad Rank косвенно влияют."},
+ {t:"Обязательны для запуска кампании", why:"Кампания запустится и без них, просто хуже."},
+ {t:"Заменяют описания", why:"Это отдельные элементы, они дополняют объявление."}
+], explain:"Ассеты — бесплатный способ занять больше места в выдаче. Их отсутствие — стандартная находка в аудите."}
+]},
+
+{ id:"m2l4", title:"Стратегии ставок", blocks:[
+{t:"p", x:"Ручное управление ставками в 2026 почти вымерло. Выбор стратегии сводится к вопросу: какой сигнал у тебя есть и сколько данных накоплено."},
+{t:"term", en:"Smart Bidding", ru:"умные ставки", d:"Общее название автоматических стратегий, использующих машинное обучение и сигналы аукциона в реальном времени."},
+{t:"tab", head:["Стратегия","Когда применять","Риск"], rows:[
+["Maximize clicks","Совсем новый аккаунт без конверсий, нужен трафик для старта","Приводит дешёвый нецелевой трафик"],
+["Maximize conversions","Есть конверсии, но мало и CPA пока не важен","Может разогнать цену конверсии"],
+["Target CPA (tCPA)","Стабильный поток конверсий, известна приемлемая цена лида","Слишком низкий таргет душит показы"],
+["Target ROAS (tROAS)","E-commerce с передачей ценности конверсии","Требует много данных и корректной выручки"],
+["Maximize conversion value","Есть разные по ценности конверсии","Без корректных значений бесполезна"]
+]},
+{t:"term", en:"Learning period", ru:"период обучения", d:"Время после запуска или значительного изменения, когда алгоритм собирает данные. Обычно 1–2 недели. В это время результаты нестабильны и менять настройки нельзя."},
+{t:"warn", x:"Каждое изменение стратегии, целевого CPA или конверсионного действия перезапускает обучение. Правило: одно изменение — потом две недели наблюдения. Ежедневное кручение настроек держит кампанию в вечном обучении."},
+{t:"h", x:"Сколько нужно данных"},
+{t:"ul", items:[
+"Ориентир для устойчивой работы tCPA — порядка 30 конверсий в месяц на кампанию",
+"Меньше 15 — алгоритму не хватает сигнала, лучше Maximize conversions без таргета",
+"Совсем без конверсий начинают с Maximize clicks и переключаются, когда сигнал появится"
+]},
+{t:"ex", title:"Как менять целевой CPA", body:["Нельзя: CPA $80, хочу $40, ставлю $40. Показы обвалятся, кампания встанет.","Нужно: шагами по 10–15% раз в 1–2 недели, наблюдая за объёмом. $80 → $70 → $62 → $55. Если на каком-то шаге объём падает непропорционально, значит найден предел рынка."]}
+], quiz:[
+{id:"q230", type:"single", q:"Новый аккаунт, конверсий пока ноль. Какую стратегию выбрать на старте?", options:[
+ {t:"Maximize clicks, чтобы набрать данные, затем переключиться", ok:true, why:"Без конверсий умным стратегиям не на чем учиться."},
+ {t:"Target CPA с желаемой ценой лида", why:"Алгоритму не на чем обучаться, кампания почти не будет показываться."},
+ {t:"Target ROAS", why:"Требует не только конверсий, но и переданной ценности."},
+ {t:"Maximize conversion value", why:"Нужны конверсии с разной ценностью, а их нет."}
+], explain:"Порядок: сначала трафик и накопление конверсий, потом переход на оптимизацию по цене."},
+{id:"q231", type:"single", q:"Текущий CPA $80, целевой $40. Как правильно двигаться?", options:[
+ {t:"Шагами по 10–15% раз в одну-две недели, наблюдая за объёмом", ok:true, why:"Постепенное снижение даёт алгоритму адаптироваться без обвала показов."},
+ {t:"Сразу выставить $40", why:"Алгоритм резко сократит участие в аукционах, объём обвалится."},
+ {t:"Снизить дневной бюджет вдвое", why:"Бюджет и целевой CPA — разные рычаги."},
+ {t:"Переключиться на ручные ставки", why:"Откат к ручному управлению не решает задачу и лишает сигналов реального времени."}
+], explain:"$80 → $70 → $62 → $55 → $48 → $42. Если на каком-то шаге объём падает непропорционально — предел найден."},
+{id:"q232", type:"tf", q:"Верно ли: менять целевой CPA можно хоть каждый день, алгоритм подстроится.", answer:false, explain:"Каждое изменение перезапускает период обучения. Кампания окажется в состоянии вечной нестабильности."},
+{id:"q233", type:"num", q:"Какой ориентир по количеству конверсий в месяц на кампанию нужен для устойчивой работы tCPA?", unit:"конверсий", answer:30, tol:0.5, hint:"Округлённый ориентир, который называют в большинстве руководств.", explain:"Порядка 30 конверсий в месяц. При меньшем объёме лучше Maximize conversions без жёсткого таргета."},
+{id:"q234", type:"single", q:"Что происходит в период обучения?", options:[
+ {t:"Алгоритм собирает данные, результаты нестабильны и менять настройки не стоит", ok:true, why:"Обычно занимает одну-две недели."},
+ {t:"Кампания не показывается вообще", why:"Показы идут, просто результат ещё не устоялся."},
+ {t:"Google не берёт деньги за клики", why:"Оплата идёт как обычно."},
+ {t:"Google автоматически снижает ставки вдвое", why:"Такого механизма нет."}
+], explain:"Главное правило периода обучения — не трогать. Одно изменение, потом наблюдение."},
+{id:"q235", type:"single", q:"В каком случае tROAS работать не будет?", options:[
+ {t:"Если конверсии передаются без ценности, одинаковым значением", ok:true, why:"Стратегии нечего максимизировать, если все конверсии равны."},
+ {t:"Если в кампании больше 50 ключевых слов", why:"Количество ключей значения не имеет."},
+ {t:"Если включены ассеты", why:"Ассеты никак не мешают стратегиям ставок."},
+ {t:"Если кампания работает дольше года", why:"Возраст кампании не помеха."}
+], explain:"tROAS требует, чтобы каждая конверсия приходила со своей суммой. Без этого используют tCPA."}
+]},
+
+{ id:"m2l5", title:"AI Max: что происходит прямо сейчас", blocks:[
+{t:"p", x:"Самая свежая и самая практически важная тема модуля. Большинство обучающих материалов её ещё не содержат, и знание деталей сразу выделяет тебя среди кандидатов."},
+{t:"term", en:"AI Max for Search", ru:"набор AI-функций внутри поисковых кампаний", d:"Не отдельный тип кампании, а набор функций, включаемых внутри обычной поисковой кампании. Общая доступность объявлена 15 апреля 2026 года."},
+{t:"h", x:"Три функции AI Max"},
+{t:"tab", head:["Функция","Что делает"], rows:[
+["Search term matching","Расширяет подбор запросов за пределы твоего списка ключей, используя broad match, сигналы ассетов и содержимое целевой страницы"],
+["Text customization","Генерирует текст объявления под конкретный запрос. Прежнее название — automatically created assets (ACA)"],
+["Final URL expansion","Сам подбирает целевую страницу под запрос из содержимого сайта"]
+]},
+{t:"h", x:"Сроки миграции"},
+{t:"ul", items:[
+"<b>15 апреля 2026</b> — AI Max вышел из беты, объявлена автомиграция трёх легаси-настроек: DSA, ACA и broad match на уровне кампании",
+"<b>11 июня 2026</b> — автомиграция DSA перенесена на февраль 2027 из-за рисков четвёртого квартала",
+"<b>Сентябрь 2026</b> — сроки для ACA и campaign-level broad match не изменились, они продолжают апгрейдиться по исходному календарю. 5 августа Google разослал письмо с подтверждением даты 1 сентября"
+]},
+{t:"warn", x:"Частая ошибка в новостях: «перенесли всё». Перенесли только DSA. Кампании с ACA и настройкой broad match на уровне кампании мигрируют сейчас, и это гораздо больше аккаунтов, чем использовало DSA."},
+{t:"h", x:"Что говорят независимые данные"},
+{t:"p", x:"Картина неоднозначная, и на собеседовании ценится именно взвешенный ответ, а не пересказ маркетинговых обещаний Google."},
+{t:"ul", items:[
+"Анализ Brainlabs по 23 тестам и 16 зрелым аккаунтам: кампании с включёнными всеми тремя функциями показали на 40% более высокий процент успеха, чем с одной только базовой функцией подбора запросов",
+"Text customization подняла взвешенный Quality Score с 6,8 до 7,3, сильнее всего улучшив релевантность объявлений",
+"При этом практики отмечают, что AI Max может отдавать предпочтение более дешёвому трафику с низким интентом, если данные о конверсиях не отражают качество продаж",
+"Внутри AI Max сокращены или убраны привычные рычаги: точное соответствие, ручные корректировки ставок, таргетинг по устройствам, исключения плейсментов, расписание показов"
+]},
+{t:"h", x:"Что остаётся под твоим контролем"},
+{t:"ul", items:[
+"Минус-слова — главный оставшийся рычаг",
+"Разделение брендового и небрендового трафика",
+"Контроли URL: какие страницы разрешены для подстановки, а какие исключены",
+"Что считается конверсией и насколько сигнал близок к деньгам",
+"Содержимое сайта и ассетов — именно из них AI Max берёт материал"
+]},
+{t:"ex", title:"Как правильно тестировать", body:["Выгрузить базовые показатели до включения: производительность по ключам, отчёт по запросам, CPA и ROAS по кампаниям.","Запустить эксперимент: одна кампания с AI Max против аналогичной без него, окно оценки 30 дней.","Оценивать не по количеству конверсий, а по их качеству: доля SQL, доля закрытых сделок. Именно здесь чаще всего и обнаруживается разница."]}
+], quiz:[
+{id:"q240", type:"single", q:"Что такое AI Max?", options:[
+ {t:"Набор AI-функций, включаемых внутри обычной поисковой кампании", ok:true, why:"Не отдельный тип кампании — это принципиально."},
+ {t:"Новый тип кампании, заменяющий поисковые", why:"Это функции внутри существующих кампаний."},
+ {t:"Другое название Performance Max", why:"Разные продукты. PMax охватывает все площадки, AI Max живёт в поиске."},
+ {t:"Инструмент генерации изображений", why:"AI Max работает с подбором запросов, текстом и целевыми страницами."}
+], explain:"Формулировка «набор функций внутри поисковой кампании» — правильный ответ на собеседовании."},
+{id:"q241", type:"multi", q:"Какие функции входят в AI Max? Отметь все.", options:[
+ {t:"Search term matching", ok:true, why:"Расширение подбора запросов за пределы списка ключей."},
+ {t:"Text customization", ok:true, why:"Генерация текста под конкретный запрос, бывшие ACA."},
+ {t:"Final URL expansion", ok:true, why:"Автоматический подбор целевой страницы."},
+ {t:"Automated bidding", why:"Smart Bidding существует отдельно и в AI Max не входит."}
+], explain:"Три функции. По данным Brainlabs, включение всех трёх сразу даёт заметно лучший результат, чем частичное."},
+{id:"q242", type:"single", q:"Какие кампании автоматически апгрейдятся в AI Max начиная с сентября 2026?", options:[
+ {t:"С automatically created assets и с настройкой broad match на уровне кампании", ok:true, why:"Для них срок не переносился."},
+ {t:"Только Dynamic Search Ads", why:"Их автомиграцию перенесли на февраль 2027."},
+ {t:"Все поисковые кампании без исключения", why:"Только кампании с этими легаси-настройками."},
+ {t:"Только кампании Performance Max", why:"PMax к этой миграции отношения не имеет."}
+], explain:"Частая ошибка — думать, что перенесли всё. Перенос коснулся только DSA."},
+{id:"q243", type:"single", q:"Какой рычаг остаётся главным инструментом контроля при работе с AI Max?", options:[
+ {t:"Минус-слова и контроли URL", ok:true, why:"Точное соответствие, корректировки ставок и таргетинг по устройствам внутри AI Max сокращены или убраны."},
+ {t:"Ручные корректировки ставок по устройствам", why:"Внутри AI Max этот рычаг убран."},
+ {t:"Расписание показов по часам", why:"Тоже в числе сокращённых возможностей."},
+ {t:"Точное соответствие ключей", why:"Логика подбора запросов работает шире заданного списка."}
+], explain:"Когда автоматика забирает управление закупкой, остаются два рычага: что запретить и что считать результатом."},
+{id:"q244", type:"tf", q:"Верно ли: независимые данные однозначно подтверждают, что AI Max улучшает результат в любом аккаунте.", answer:false, explain:"Картина неоднозначная. Есть данные о более высоком проценте успеха при включении всех трёх функций, но практики отмечают смещение в сторону дешёвого трафика с низким интентом при слабом конверсионном сигнале."},
+{id:"q245", type:"single", q:"Как правильно оценить результат теста AI Max в лидогенерации?", options:[
+ {t:"По качеству лидов: доля SQL и доля закрытых сделок, а не только по количеству конверсий", ok:true, why:"Расхождение проявляется именно в качестве."},
+ {t:"По количеству конверсий в кабинете", why:"Может вырасти при одновременном падении качества."},
+ {t:"По CTR", why:"CTR ничего не говорит о ценности трафика."},
+ {t:"По показателю качества", why:"Полезная диагностика, но не показатель коммерческого результата."}
+], explain:"Ровно поэтому модуль по измерению шёл раньше: без связки с CRM оценить AI Max честно невозможно."},
+{id:"q246", type:"single", q:"Что нужно сделать до включения AI Max в работающем аккаунте?", options:[
+ {t:"Выгрузить базовые показатели: ключи, search terms, CPA и ROAS по кампаниям", ok:true, why:"Без базы сравнения результат теста невозможно интерпретировать."},
+ {t:"Удалить все минус-слова", why:"Наоборот, они становятся ещё важнее."},
+ {t:"Отключить конверсионный трекинг", why:"Автоматике необходим конверсионный сигнал."},
+ {t:"Повысить бюджет вдвое", why:"Увеличит цену возможной ошибки."}
+], explain:"Правило любого теста: сначала зафиксируй точку отсчёта. Без неё через месяц будет невозможно понять, что изменилось."}
+]},
+
+{ id:"m2l6", title:"Рутина: что делать каждый день", blocks:[
+{t:"p", x:"Работа PPC-специалиста на 80% состоит из повторяющихся проверок. Именно наличие чёткой рутины отличает профессионала от человека, который заходит в аккаунт когда вспомнит."},
+{t:"h", x:"Ежедневно, 15 минут"},
+{t:"ul", items:[
+"Расход: нет ли резкого отклонения от плана в обе стороны",
+"Ошибки: отклонённые объявления, проблемы с биллингом, предупреждения в аккаунте",
+"Конверсии: приходят ли вообще. Обрыв на сутки — сигнал тревоги",
+"Аномалии: кампания, внезапно съевшая половину бюджета"
+]},
+{t:"h", x:"Еженедельно, 1–2 часа"},
+{t:"ul", items:[
+"Отчёт по поисковым запросам: чистка и пополнение минус-слов",
+"Результаты по кампаниям и группам в сравнении с прошлой неделей",
+"Проверка новых ассетов и объявлений на статус",
+"Pacing бюджета: успеваем ли в месячный план",
+"Один тест: новое объявление, новая страница, новый сегмент"
+]},
+{t:"h", x:"Ежемесячно"},
+{t:"ul", items:[
+"Отчёт клиенту или руководству с выводами, а не с дампом цифр",
+"Сверка расхода платформы со счётом",
+"Пересмотр структуры: что объединить, что разделить",
+"Проверка качества лидов по данным CRM"
+]},
+{t:"term", en:"Pacing", ru:"темп расхода бюджета", d:"Соотношение фактического расхода с планом на период. Считается просто: расход на сегодня делить на количество прошедших дней, умножить на количество дней в месяце."},
+{t:"f", x:"Прогноз расхода = расход на сегодня / прошло дней × дней в месяце", note:"Потрачено $3 200 за 12 дней из 30 → прогноз $8 000"},
+{t:"h", x:"Performance Max: минимум, который нужно знать"},
+{t:"term", en:"PMax — Performance Max", ru:"кампания по всем площадкам Google", d:"Один тип кампании, охватывающий поиск, Display, YouTube, Discover, Gmail и Карты. Ты даёшь ассеты, сигналы аудитории и цель, а распределение берёт на себя Google."},
+{t:"p", x:"Для джуниора важно знать три вещи: PMax каннибализирует брендовый трафик, если бренд не исключён; отчётность в нём беднее, чем в поиске; исключения по брендам и плейсментам — основной способ контроля."},
+{t:"ex", title:"Задача на pacing", body:["Месячный бюджет $9 000. Прошло 18 дней, потрачено $6 300.","Прогноз: 6 300 / 18 × 30 = $10 500. Перерасход $1 500, то есть 17%.","Решение: снизить дневные бюджеты примерно на 20% на оставшиеся 12 дней либо согласовать увеличение месячного бюджета."]}
+], quiz:[
+{id:"q250", type:"num", q:"Месячный бюджет $12 000. Прошло 10 дней из 30, потрачено $4 600. Каким будет прогноз расхода за месяц?", unit:"$", answer:13800, tol:50, hint:"Расход делить на прошедшие дни, умножить на дни в месяце.", explain:"4 600 / 10 × 30 = $13 800. Перерасход $1 800, дневные бюджеты нужно уменьшать."},
+{id:"q251", type:"single", q:"Конверсии в кампании обнулились со вчерашнего дня, расход идёт как обычно. Первое действие?", options:[
+ {t:"Проверить трекинг: не менялся ли сайт, работает ли тег, не сломался ли триггер", ok:true, why:"Резкий обрыв конверсий при живом расходе почти всегда поломка измерения."},
+ {t:"Отключить кампанию", why:"Можно отключить работающую рекламу из-за проблемы, которой в ней нет."},
+ {t:"Поднять ставки", why:"К обрыву конверсий не имеет отношения."},
+ {t:"Подождать неделю, может восстановится", why:"Неделя на сломанном трекинге — это неделя обучения алгоритма на пустоте."}
+], explain:"Резкий обрыв — почти всегда техническая поломка. Плавное снижение — уже вопрос рынка и конкуренции."},
+{id:"q252", type:"multi", q:"Что входит в еженедельную рутину? Отметь все.", options:[
+ {t:"Разбор отчёта по поисковым запросам", ok:true, why:"Основная еженедельная задача."},
+ {t:"Пополнение списка минус-слов", ok:true, why:"Прямое следствие разбора запросов."},
+ {t:"Проверка pacing бюджета", ok:true, why:"Чтобы не обнаружить перерасход в последний день месяца."},
+ {t:"Смена целевого CPA каждую неделю", why:"Частые изменения держат кампанию в вечном обучении."}
+], explain:"Еженедельно чистят запросы и следят за темпом. Стратегию трогают редко и по одному параметру."},
+{id:"q253", type:"single", q:"Чем PMax отличается от поисковой кампании?", options:[
+ {t:"Охватывает все площадки Google сразу, а распределением управляет алгоритм", ok:true, why:"Поиск, Display, YouTube, Discover, Gmail и Карты в одной кампании."},
+ {t:"Работает только с текстовыми объявлениями", why:"Наоборот, требует полный набор ассетов включая изображения и видео."},
+ {t:"Показывается только в поиске", why:"Это описание обычной поисковой кампании."},
+ {t:"Не требует конверсионного трекинга", why:"Требует, и даже сильнее обычных кампаний."}
+], explain:"Плата за широту охвата — бедная отчётность и меньше контроля. Основные рычаги — исключения по брендам и плейсментам."},
+{id:"q254", type:"tf", q:"Верно ли: PMax может забирать себе брендовый трафик, если бренд не исключён.", answer:true, explain:"Классическая проблема: PMax показывает отличный CPA, потому что съел дешёвые брендовые запросы у поисковой кампании. Общий результат при этом не улучшился."},
+{id:"q255", type:"single", q:"Какой отчёт нужно смотреть еженедельно в любой поисковой кампании?", options:[
+ {t:"Search terms report", ok:true, why:"Единственный источник правды о том, по каким запросам реально уходят деньги."},
+ {t:"Отчёт по устройствам", why:"Полезен, но не еженедельная обязанность."},
+ {t:"Отчёт по геолокациям", why:"Смотрят реже, обычно раз в месяц."},
+ {t:"История изменений аккаунта", why:"Нужна при разборе инцидентов, а не как регулярная рутина."}
+], explain:"Разбор поисковых запросов — главная еженедельная привычка. Её отсутствие видно в аккаунте сразу."}
+]}
+
+], exam:[
+{id:"e200", type:"single", q:"Экзамен. Из чего складывается Ad Rank?", options:[
+ {t:"Ставка, качество объявления и страницы, влияние ассетов, контекст запроса", ok:true, why:"Деньги — лишь одна составляющая."},
+ {t:"Только ставка и бюджет", why:"Бюджет вообще не участвует в аукционе."},
+ {t:"Количество ключевых слов и объявлений", why:"На рейтинг не влияет."},
+ {t:"Возраст аккаунта", why:"Прямого влияния нет."}
+], explain:"Поэтому конкурент с меньшей ставкой может стоять выше."},
+{id:"e201", type:"single", q:"Как записывается exact match?", options:[
+ {t:"В квадратных скобках", ok:true, why:"Кавычки означают фразовое соответствие."},
+ {t:"В кавычках", why:"Это phrase match."},
+ {t:"Без знаков", why:"Это broad match."},
+ {t:"С восклицательным знаком", why:"Такого синтаксиса нет."}
+], explain:"Скобки — точное, кавычки — фраза, без знаков — широкое."},
+{id:"e202", type:"multi", q:"Какие запросы отправить в минус-слова для компании, продающей установку систем видеонаблюдения? Отметь все.", options:[
+ {t:"«видеонаблюдение своими руками»", ok:true, why:"Ищет инструкцию, а не услугу."},
+ {t:"«работа монтажником видеонаблюдения»", ok:true, why:"Ищет трудоустройство."},
+ {t:"«установка видеонаблюдения цена»", why:"Прямой коммерческий интент."},
+ {t:"«скачать схему видеонаблюдения бесплатно»", ok:true, why:"И «скачать», и «бесплатно» — признаки нецелевого интента."}
+], explain:"Минусуют интент. Полезнее минусовать паттерн целиком: «своими руками», «работа», «бесплатно»."},
+{id:"e203", type:"num", q:"Месячный бюджет $15 000. Прошло 20 дней, потрачено $11 000. Каким будет прогноз расхода за месяц?", unit:"$", answer:16500, tol:50, explain:"11 000 / 20 × 30 = $16 500. Перерасход $1 500."},
+{id:"e204", type:"single", q:"Сколько заголовков и описаний можно загрузить в RSA?", options:[
+ {t:"15 заголовков и 4 описания", ok:true, why:"Заголовки до 30 символов, описания до 90."},
+ {t:"3 заголовка и 2 описания", why:"Это количество, показываемое одновременно."},
+ {t:"10 заголовков и 10 описаний", why:"Лимиты другие."},
+ {t:"30 заголовков и 90 описаний", why:"Это лимиты символов, а не количества."}
+], explain:"15 и 4 — обязательные к запоминанию цифры."},
+{id:"e205", type:"single", q:"Какие три функции входят в AI Max?", options:[
+ {t:"Search term matching, text customization, final URL expansion", ok:true, why:"По данным Brainlabs, включение всех трёх даёт лучший результат, чем частичное."},
+ {t:"Smart Bidding, broad match, sitelinks", why:"Это отдельные механики Google Ads, в AI Max они не входят."},
+ {t:"Performance Max, Demand Gen, Shopping", why:"Это типы кампаний."},
+ {t:"Enhanced conversions, Consent Mode, CAPI", why:"Это механизмы измерения."}
+], explain:"Три функции: расширение подбора запросов, генерация текста, подбор целевой страницы."},
+{id:"e206", type:"tf", q:"Верно ли: автомиграция кампаний с ACA и настройкой broad match на уровне кампании была перенесена на февраль 2027.", answer:false, explain:"Перенос коснулся только DSA. Для ACA и campaign-level broad match сроки остались прежними — с сентября 2026."},
+{id:"e207", type:"single", q:"Новый аккаунт, конверсий ноль, нужно набрать данные. Стратегия?", options:[
+ {t:"Maximize clicks", ok:true, why:"Умным стратегиям нужен накопленный конверсионный сигнал."},
+ {t:"Target CPA", why:"Не на чем обучаться, показы почти остановятся."},
+ {t:"Target ROAS", why:"Требует ещё и переданной ценности конверсии."},
+ {t:"Ручные ставки с корректировками по устройствам", why:"Устаревший подход, часть рычагов уже недоступна."}
+], explain:"Сначала трафик и накопление конверсий, потом переход на оптимизацию по цене."},
+{id:"e208", type:"num", q:"Текущий CPA $90. На сколько процентов максимум стоит снижать целевой CPA за один шаг?", unit:"%", answer:15, tol:0.5, explain:"Шаг 10–15% раз в одну-две недели. Резкое снижение обваливает объём показов."},
+{id:"e209", type:"single", q:"Конверсии обнулились со вчерашнего дня, расход идёт. Первое действие?", options:[
+ {t:"Проверить трекинг: изменения на сайте, работу тега, триггер", ok:true, why:"Резкий обрыв — почти всегда поломка измерения."},
+ {t:"Снизить ставки", why:"К обрыву конверсий отношения не имеет."},
+ {t:"Написать в поддержку Google", why:"Стоит сначала проверить свою сторону."},
+ {t:"Добавить минус-слова", why:"Не решает проблему обрыва конверсий."}
+], explain:"Резкий обрыв — техника. Плавное снижение — рынок и конкуренция."},
+{id:"e210", type:"multi", q:"Что остаётся под контролем специалиста при работе с AI Max? Отметь все.", options:[
+ {t:"Минус-слова", ok:true, why:"Главный оставшийся рычаг."},
+ {t:"Контроли URL — какие страницы разрешены для подстановки", ok:true, why:"Ограничивают область работы final URL expansion."},
+ {t:"Разделение брендового и небрендового трафика", ok:true, why:"Структурное решение, оно остаётся за тобой."},
+ {t:"Корректировки ставок по устройствам", why:"Внутри AI Max этот рычаг сокращён."}
+], explain:"Управление смещается от закупки к ограничениям и к качеству входных данных."},
+{id:"e211", type:"single", q:"Зачем разделять брендовые и небрендовые кампании?", options:[
+ {t:"У них разная цена и конверсия; иначе дешёвый бренд маскирует результат небренда", ok:true, why:"И раздельные бюджеты становятся управляемыми."},
+ {t:"Google начисляет скидку за разделение", why:"Скидок за структуру не существует."},
+ {t:"Это требование политики Google Ads", why:"Требования нет, это практика."},
+ {t:"Так быстрее проходит модерация", why:"К модерации отношения не имеет."}
+], explain:"Стандартный вопрос собеседования. Ответ про честную оценку и раздельные бюджеты."},
+{id:"e212", type:"tf", q:"Верно ли: PMax может каннибализировать брендовый трафик поисковой кампании.", answer:true, explain:"Классическая проблема: PMax показывает прекрасный CPA за счёт съеденных дешёвых брендовых запросов, хотя общий результат не улучшился."},
+{id:"e213", type:"single", q:"Когда оправдано pinning в RSA?", options:[
+ {t:"Когда формулировка обязана звучать дословно: юридическая оговорка, название бренда", ok:true, why:"В остальных случаях сужает возможности подбора комбинаций."},
+ {t:"Всегда, для полного контроля текста", why:"Лишает формат смысла."},
+ {t:"В кампаниях с бюджетом выше $10 000", why:"Размер бюджета тут ни при чём."},
+ {t:"Только при использовании AI Max", why:"Связи нет; при включённом final URL expansion закрепление вообще может не соблюдаться."}
+], explain:"Закрепляй только то, что обязано звучать дословно."},
+{id:"e214", type:"single", q:"Какой показатель говорит о качестве трафика из AI Max в лидогенерации?", options:[
+ {t:"Доля лидов, ставших SQL, и доля закрытых сделок", ok:true, why:"Именно здесь проявляется смещение в сторону низкого интента."},
+ {t:"Количество конверсий в кабинете", why:"Может вырасти при одновременном падении качества."},
+ {t:"CTR объявлений", why:"Не связан с ценностью трафика."},
+ {t:"Показатель качества ключевых слов", why:"Диагностика релевантности, а не коммерческого результата."}
+], explain:"Без связки с CRM честно оценить AI Max невозможно — поэтому модуль по измерению шёл раньше."},
+{id:"e215", type:"num", q:"Kампания получила 24 000 показов, 720 кликов, 36 конверсий при расходе $1 440. Чему равен CPA?", unit:"$", answer:40, tol:0.5, explain:"1 440 / 36 = $40. Попутно: CTR 3%, CVR 5%, CPC $2."},
+{id:"e216", type:"single", q:"Что такое search terms report и почему он важен?", options:[
+ {t:"Отчёт о реальных запросах людей; показывает разницу между тем, что ты купил, и что получил", ok:true, why:"Основной еженедельный отчёт специалиста."},
+ {t:"Список ключевых слов, которые ты добавил в кампанию", why:"Это отчёт по ключевым словам, другой."},
+ {t:"Список минус-слов", why:"Минус-слова формируются по итогам разбора этого отчёта."},
+ {t:"Отчёт о поисковых подсказках Google", why:"Такого отчёта в Google Ads нет."}
+], explain:"Ключи — что купил. Search terms — что получил. Разбор разницы и есть работа."},
+{id:"e217", type:"multi", q:"Какие проверки входят в ежедневную рутину? Отметь все.", options:[
+ {t:"Расход и отклонения от плана", ok:true, why:"Аномалия видна сразу."},
+ {t:"Отклонённые объявления и предупреждения аккаунта", ok:true, why:"Иначе кампания может стоять сутками."},
+ {t:"Приходят ли конверсии вообще", ok:true, why:"Обрыв на сутки — сигнал тревоги."},
+ {t:"Полная перестройка структуры кампаний", why:"Это ежемесячная или разовая задача, не ежедневная."}
+], explain:"Ежедневно — быстрый контроль здоровья за 15 минут. Глубокие изменения делаются по расписанию."},
+{id:"e218", type:"tf", q:"Верно ли: в 2026 больше кампаний в аккаунте означает лучший контроль и результат.", answer:false, explain:"Дробление размывает данные и замедляет обучение автоматики. Делить надо по реальной причине, а не ради контроля."},
+{id:"e219", type:"single", q:"Как правильно поставить тест AI Max в работающем аккаунте?", options:[
+ {t:"Выгрузить базу, запустить эксперимент против аналогичной кампании, окно оценки 30 дней", ok:true, why:"Без точки отсчёта результат невозможно интерпретировать."},
+ {t:"Включить во всех кампаниях сразу и смотреть через неделю", why:"Не с чем сравнивать, а неделя короче периода обучения."},
+ {t:"Включить и оценить по количеству кликов", why:"Клики не отражают коммерческий результат."},
+ {t:"Дождаться автомиграции и ничего не делать", why:"Тогда изменение произойдёт без подготовки и без базовых данных."}
+], explain:"Любой тест: зафиксируй базу, меняй одну переменную, дай достаточное окно, оценивай по деньгам."}
+]
+}
+
+]};
+
+
+/* ===================== storage ===================== */
+const KEY = "ppctrack.v1";
+const blank = () => ({v:1, lessons:{}, exams:{}, theme:"auto", unlockAll:false});
+let S = load();
+
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return blank();
+    const o = JSON.parse(raw);
+    return Object.assign(blank(), o);
+  }catch(e){ return blank(); }
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch(e){ toast("Браузер не дал сохранить прогресс. Проверь режим инкогнито."); }
+}
+function applyTheme(){
+  document.documentElement.setAttribute("data-theme", S.theme || "auto");
+}
+
+/* ===================== helpers ===================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+function toast(msg){
+  const t = document.createElement("div");
+  t.className = "toast"; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2600);
+}
+const allLessons = () => COURSE.modules.flatMap(m => m.lessons.map(l => ({m, l})));
+const lessonDone = id => !!(S.lessons[id] && S.lessons[id].done);
+const examPassed = id => !!(S.exams[id] && S.exams[id].passed);
+
+function moduleUnlocked(i){
+  if(S.unlockAll) return true;
+  if(i === 0) return true;
+  return examPassed(COURSE.modules[i-1].id);
+}
+function moduleProgress(m){
+  const total = m.lessons.length + 1;
+  let done = m.lessons.filter(l => lessonDone(l.id)).length;
+  if(examPassed(m.id)) done++;
+  return {done, total, pct: Math.round(done/total*100)};
+}
+function overallPct(){
+  let t=0, d=0;
+  COURSE.modules.forEach(m => { const p = moduleProgress(m); t += p.total; d += p.done; });
+  return t ? Math.round(d/t*100) : 0;
+}
+
+/* ===================== router ===================== */
+let view = {name:"home"};
+function go(v){ view = v; window.scrollTo(0,0); render(); }
+
+function render(){
+  applyTheme();
+  renderRail();
+  const M = $("#main");
+  if(view.name === "home") M.innerHTML = viewHome();
+  else if(view.name === "glossary") M.innerHTML = viewGlossary();
+  else if(view.name === "progress") M.innerHTML = viewProgress();
+  else if(view.name === "module") M.innerHTML = viewModule(view.m);
+  else if(view.name === "lesson") M.innerHTML = viewLesson(view.m, view.l);
+  else if(view.name === "quiz") { renderQuiz(); return; }
+  bind();
+}
+
+function renderRail(){
+  const pct = overallPct();
+  $("#gauge").style.width = pct + "%";
+  $("#gaugeTxt").textContent = pct + "% пройдено";
+  document.querySelectorAll("button[data-nav]").forEach(b => {
+    b.setAttribute("aria-current", view.name === b.dataset.nav ? "true" : "false");
+  });
+  $("#modlist").innerHTML = COURSE.modules.map((m,i) => {
+    const unlocked = moduleUnlocked(i);
+    const p = moduleProgress(m);
+    const done = p.done === p.total;
+    const active = !done && unlocked && p.done > 0;
+    const cur = (view.name==="module"||view.name==="lesson"||view.name==="quiz") && view.m===i;
+    return `<button class="modrow ${done?"done":""} ${active?"active":""}" data-mod="${i}" ${unlocked?"":"disabled"} aria-current="${cur}">
+      <span class="mn">${done ? "&#10003;" : (unlocked ? "M"+m.num : "&#9679;")}</span>
+      <span class="mt">${esc(m.title)}</span>
+      <span class="mp">${unlocked ? p.done+"/"+p.total : ""}</span>
+    </button>`;
+  }).join("");
+}
+
+/* ===================== views ===================== */
+function viewHome(){
+  const pct = overallPct();
+  const lessonsDone = allLessons().filter(x => lessonDone(x.l.id)).length;
+  const qTotal = COURSE.modules.reduce((a,m)=>a+m.lessons.reduce((b,l)=>b+l.quiz.length,0)+m.exam.length,0);
+  const next = nextThing();
+  return `
+  <h1>Карта курса</h1>
+  <p class="lead">Путь от «умею запускать рекламу в Facebook» до собеседования на junior PPC. Термины даются на английском — так они выглядят в рабочих интерфейсах. Модуль открывается после сдачи экзамена предыдущего.</p>
+  <div class="stats">
+    <div class="stat"><div class="v">${pct}%</div><div class="l">пройдено</div></div>
+    <div class="stat"><div class="v">${lessonsDone}<span style="color:var(--ink3);font-size:16px">/${allLessons().length}</span></div><div class="l">уроков</div></div>
+    <div class="stat"><div class="v">${COURSE.modules.filter(m=>examPassed(m.id)).length}<span style="color:var(--ink3);font-size:16px">/${COURSE.modules.length}</span></div><div class="l">экзаменов сдано</div></div>
+    <div class="stat"><div class="v">${qTotal}</div><div class="l">вопросов в базе</div></div>
+  </div>
+  ${next ? `<div class="row" style="margin:22px 0 6px"><button class="btn" data-open="${next.href}">${esc(next.label)}</button><span style="font-size:14px;color:var(--ink2)">${esc(next.sub)}</span></div>` : `<p style="margin-top:22px"><span class="badge ok">Все доступные модули пройдены</span></p>`}
+  <div class="sep"></div>
+  <h2>Модули</h2>
+  <div class="lessonlist">
+  ${COURSE.modules.map((m,i)=>{
+    const u = moduleUnlocked(i); const p = moduleProgress(m);
+    return `<button class="lrow ${p.done===p.total?"done":""}" data-mod="${i}" ${u?"":"disabled"} style="${u?"":"opacity:.45;cursor:not-allowed"}">
+      <span class="lm">${p.done===p.total?"&#10003;":"M"+m.num}</span>
+      <span><span class="lt">${esc(m.title)}</span><span class="ls">${esc(m.subtitle)} · ${esc(m.duration)}</span></span>
+      <span class="lsc">${u ? p.done+"/"+p.total : "закрыт"}</span>
+    </button>`;
+  }).join("")}
+  </div>
+  <p style="font-size:13.5px;color:var(--ink3);max-width:70ch">Дальше в производстве: M3 Meta Ads, M4 креатив и копирайтинг, M5 лендинги, M6 email, M7 deliverability, M8 AI в работе, M9 отчётность, M10 трудоустройство.</p>`;
+}
+
+function nextThing(){
+  for(let i=0;i<COURSE.modules.length;i++){
+    if(!moduleUnlocked(i)) break;
+    const m = COURSE.modules[i];
+    const l = m.lessons.find(x => !lessonDone(x.id));
+    if(l) return {href:`lesson:${i}:${m.lessons.indexOf(l)}`, label:"Продолжить", sub:`M${m.num} · ${l.title}`};
+    if(!examPassed(m.id)) return {href:`exam:${i}`, label:"Сдать экзамен модуля", sub:`M${m.num} · ${m.title}`};
+  }
+  return null;
+}
+
+function viewModule(mi){
+  const m = COURSE.modules[mi];
+  const p = moduleProgress(m);
+  const allL = m.lessons.every(l => lessonDone(l.id));
+  const ex = S.exams[m.id];
+  return `
+  <div class="crumb">Модуль ${m.num} · ${esc(m.duration)}</div>
+  <h1>${esc(m.title)}</h1>
+  <p class="lead">${esc(m.intro)}</p>
+  <div class="gauge" style="max-width:320px;margin:20px 0 6px"><i style="width:${p.pct}%"></i></div>
+  <div class="mono" style="font-size:12.5px;color:var(--ink3)">${p.done} из ${p.total}</div>
+  <h2>Уроки</h2>
+  <div class="lessonlist">
+  ${m.lessons.map((l,li)=>{
+    const d = lessonDone(l.id); const r = S.lessons[l.id];
+    return `<button class="lrow ${d?"done":""}" data-open="lesson:${mi}:${li}">
+      <span class="lm">${d?"&#10003;":li+1}</span>
+      <span><span class="lt">${esc(l.title)}</span><span class="ls">${l.quiz.length} вопрос${plural(l.quiz.length)}</span></span>
+      <span class="lsc">${r&&r.score!=null?r.score+"/"+r.total:""}</span>
+    </button>`;
+  }).join("")}
+  </div>
+  <h2>Экзамен модуля</h2>
+  <p>${m.exam.length} вопрос${plural(m.exam.length)} вперемешку по всем урокам. Проходной балл — ${m.pass}%. Экзамен открывается после всех уроков; пересдавать можно сколько угодно.</p>
+  ${ex ? `<p><span class="badge ${ex.passed?"ok":""}">${ex.passed?"Сдан":"Не сдан"} · ${ex.score}/${ex.total} (${Math.round(ex.score/ex.total*100)}%)</span></p>` : ""}
+  <div class="row" style="margin-top:14px">
+    <button class="btn" data-open="exam:${mi}" ${allL?"":"disabled"}>${ex?"Пересдать экзамен":"Начать экзамен"}</button>
+    ${allL?"":`<span style="font-size:14px;color:var(--ink2)">Сначала пройди все уроки модуля</span>`}
+  </div>`;
+}
+
+function plural(n){
+  const a = n%10, b = n%100;
+  if(a===1 && b!==11) return "";
+  if(a>=2 && a<=4 && (b<12||b>14)) return "а";
+  return "ов";
+}
+
+function viewLesson(mi, li){
+  const m = COURSE.modules[mi], l = m.lessons[li];
+  return `
+  <div class="crumb">M${m.num} · урок ${li+1} из ${m.lessons.length}</div>
+  <h1>${esc(l.title)}</h1>
+  ${l.blocks.map(renderBlock).join("")}
+  <div class="sep"></div>
+  <div class="row">
+    <button class="btn" data-open="quiz:${mi}:${li}">Перейти к вопросам (${l.quiz.length})</button>
+    <button class="btn ghost" data-open="module:${mi}">К модулю</button>
+  </div>`;
+}
+
+function renderBlock(b){
+  if(b.t==="p") return `<p>${b.x}</p>`;
+  if(b.t==="h") return `<h2>${esc(b.x)}</h2>`;
+  if(b.t==="term") return `<div class="term"><b>${esc(b.en)}</b> <span class="ru">— ${esc(b.ru)}</span><p>${b.d}</p></div>`;
+  if(b.t==="f") return `<div class="formula">${esc(b.x)}${b.note?`<div class="note">${b.note}</div>`:""}</div>`;
+  if(b.t==="ex") return `<div class="ex"><h4>${esc(b.title)}</h4>${b.body.map(x=>`<p>${x}</p>`).join("")}</div>`;
+  if(b.t==="warn") return `<div class="warn"><p>${b.x}</p></div>`;
+  if(b.t==="ul") return `<ul class="blist">${b.items.map(i=>`<li>${i}</li>`).join("")}</ul>`;
+  if(b.t==="tab") return `<div class="wrapscroll"><table class="btab"><thead><tr>${b.head.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${b.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  return "";
+}
+
+/* ===================== quiz engine ===================== */
+let Q = null;
+function startQuiz(mi, li, isExam){
+  const m = COURSE.modules[mi];
+  const items = isExam ? shuffle(m.exam.slice()) : m.lessons[li].quiz.slice();
+  Q = {mi, li, isExam, items, i:0, correct:0, picked:[], checked:false, hintShown:false, results:[]};
+  view = {name:"quiz", m:mi, l:li};
+  window.scrollTo(0,0);
+  renderQuiz();
+}
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function renderQuiz(){
+  renderRail();
+  if(Q.i >= Q.items.length) return renderQuizEnd();
+  const q = Q.items[Q.i];
+  const m = COURSE.modules[Q.mi];
+  const pct = Math.round(Q.i / Q.items.length * 100);
+  const tagmap = {single:"один ответ", multi:"несколько ответов", tf:"верно или нет", num:"расчёт"};
+  let body = "";
+  if(q.type==="num"){
+    body = `<div class="numwrap"><input class="numin" id="numin" type="text" inputmode="decimal" placeholder="0" ${Q.checked?"disabled":""} value="${Q.picked[0]!=null?Q.picked[0]:""}"><span class="unit">${esc(q.unit||"")}</span></div>`;
+    if(Q.checked){
+      const ok = Q.results[Q.results.length-1].ok;
+      body += `<div class="verdict ${ok?"good":"bad"}"><b>${ok?"Верно":"Неверно. Правильный ответ: "+q.answer+" "+(q.unit||"")}</b>${q.explain}</div>`;
+    }
+  } else {
+    const opts = q.type==="tf" ? [{t:"Верно"},{t:"Неверно"}] : q.options;
+    body = `<div class="opts">` + opts.map((o,oi)=>{
+      const sel = Q.picked.includes(oi);
+      let cls = "", why = "";
+      if(Q.checked){
+        const isRight = q.type==="tf" ? (oi===0)===q.answer : !!o.ok;
+        if(isRight) cls = "right";
+        else if(sel) cls = "wrong";
+        if(o.why && (sel || isRight)) why = `<span class="why">${o.why}</span>`;
+      }
+      const mk = q.type==="multi" ? (sel?"&#10003;":"") : String.fromCharCode(65+oi);
+      return `<button class="opt ${q.type==="multi"?"multi":""} ${cls}" data-opt="${oi}" aria-pressed="${sel}" ${Q.checked?"disabled":""}>
+        <span class="mk">${mk}</span><span>${o.t}${why}</span></button>`;
+    }).join("") + `</div>`;
+    if(Q.checked){
+      const ok = Q.results[Q.results.length-1].ok;
+      body += `<div class="verdict ${ok?"good":"bad"}"><b>${ok?"Верно":"Неверно"}</b>${q.explain}</div>`;
+    }
+  }
+  let hint = "";
+  if(!Q.isExam && q.hint && !Q.checked){
+    hint = Q.hintShown
+      ? `<div class="hintbox">${q.hint}</div>`
+      : `<div class="row" style="margin-bottom:14px"><button class="btn ghost sm" id="hintbtn">Показать подсказку</button></div>`;
+  }
+
+  $("#main").innerHTML = `
+  <div class="crumb">${Q.isExam ? "M"+m.num+" · экзамен модуля" : "M"+m.num+" · урок "+(Q.li+1)+" · вопросы"}</div>
+  <div class="qcard">
+    <div class="qtop"><span class="qcount">${Q.i+1} / ${Q.items.length}</span><span class="qbar"><i style="width:${pct}%"></i></span><span class="qcount">верно: ${Q.correct}</span></div>
+    <span class="qtag">${tagmap[q.type]}</span>
+    <p class="qtext">${q.q}</p>
+    ${hint}
+    ${body}
+    <div class="row">
+      ${Q.checked
+        ? `<button class="btn" id="nextq">${Q.i+1===Q.items.length?"Завершить":"Следующий вопрос"}</button>`
+        : `<button class="btn" id="checkq" ${Q.picked.length||q.type==="num"?"":"disabled"}>Проверить</button>`}
+      <button class="btn ghost" data-open="${Q.isExam?`module:${Q.mi}`:`lesson:${Q.mi}:${Q.li}`}">Выйти</button>
+    </div>
+  </div>`;
+  bindQuiz();
+}
+
+function bindQuiz(){
+  document.querySelectorAll("button[data-opt]").forEach(b=>{
+    b.onclick = () => {
+      const q = Q.items[Q.i], oi = +b.dataset.opt;
+      if(q.type==="multi"){
+        const k = Q.picked.indexOf(oi);
+        k>=0 ? Q.picked.splice(k,1) : Q.picked.push(oi);
+      } else Q.picked = [oi];
+      renderQuiz();
+    };
+  });
+  const hb = $("#hintbtn");
+  if(hb) hb.onclick = () => { Q.hintShown = true; renderQuiz(); };
+  const ni = $("#numin");
+  if(ni){
+    ni.oninput = () => { Q.picked = [ni.value]; };
+    ni.onkeydown = e => { if(e.key==="Enter" && !Q.checked) checkQ(); };
+  }
+  const cb = $("#checkq"); if(cb) cb.onclick = checkQ;
+  const nb = $("#nextq"); if(nb) nb.onclick = () => { Q.i++; Q.picked=[]; Q.checked=false; Q.hintShown=false; renderQuiz(); };
+  document.querySelectorAll("button[data-open]").forEach(b => b.onclick = () => open(b.dataset.open));
+}
+
+function checkQ(){
+  const q = Q.items[Q.i];
+  let ok = false;
+  if(q.type==="num"){
+    const live = $("#numin");
+    const raw = live ? live.value : (Q.picked[0] || "");
+    Q.picked = [raw];
+    const v = parseFloat(String(raw).replace(",",".").replace(/[^\d.\-]/g,""));
+    ok = !isNaN(v) && Math.abs(v - q.answer) <= (q.tol != null ? q.tol : 0.01);
+  } else if(q.type==="tf"){
+    ok = Q.picked.length===1 && ((Q.picked[0]===0) === q.answer);
+  } else if(q.type==="multi"){
+    const right = q.options.map((o,i)=>o.ok?i:-1).filter(i=>i>=0).sort().join(",");
+    ok = Q.picked.slice().sort((a,b)=>a-b).join(",") === right;
+  } else {
+    ok = Q.picked.length===1 && !!q.options[Q.picked[0]].ok;
+  }
+  if(ok) Q.correct++;
+  Q.results.push({id:q.id, ok});
+  Q.checked = true;
+  renderQuiz();
+}
+
+function renderQuizEnd(){
+  const m = COURSE.modules[Q.mi];
+  const total = Q.items.length, score = Q.correct;
+  const pct = Math.round(score/total*100);
+  let head = "", note = "";
+  if(Q.isExam){
+    const passed = pct >= m.pass;
+    const prev = S.exams[m.id];
+    if(!prev || score > prev.score || passed) S.exams[m.id] = {score, total, passed, date: Date.now()};
+    save();
+    head = passed
+      ? `<h1>Экзамен сдан</h1><p class="lead">${score} из ${total} — ${pct}%. Следующий модуль открыт.</p>`
+      : `<h1>Экзамен не сдан</h1><p class="lead">${score} из ${total} — ${pct}%. Нужно ${m.pass}%. Вернись к урокам, где ошибся, и пересдай — попыток сколько угодно.</p>`;
+  } else {
+    const l = m.lessons[Q.li];
+    const prev = S.lessons[l.id];
+    if(!prev || score > prev.score) S.lessons[l.id] = {done:true, score, total};
+    else S.lessons[l.id].done = true;
+    save();
+    head = `<h1>Урок пройден</h1><p class="lead">${score} из ${total} — ${pct}%.</p>`;
+  }
+  const wrong = Q.results.filter(r=>!r.ok);
+  if(wrong.length) note = `<p style="font-size:14.5px;color:var(--ink2)">Ошибок: ${wrong.length}. Разбор каждой был сразу после ответа — если что-то осталось непонятным, перечитай урок перед экзаменом.</p>`;
+  const nxt = nextThing();
+  $("#main").innerHTML = `${head}
+    <div class="stats"><div class="stat"><div class="v">${score}/${total}</div><div class="l">правильных</div></div>
+    <div class="stat"><div class="v">${pct}%</div><div class="l">результат</div></div></div>
+    ${note}
+    <div class="row" style="margin-top:20px">
+      <button class="btn" data-open="${Q.isExam?`module:${Q.mi}`:(nxt?nxt.href:`module:${Q.mi}`)}">${Q.isExam?"К модулю":"Дальше"}</button>
+      <button class="btn ghost" data-open="${Q.isExam?`exam:${Q.mi}`:`quiz:${Q.mi}:${Q.li}`}">Пройти ещё раз</button>
+      <button class="btn ghost" data-open="home">Карта курса</button>
+    </div>`;
+  renderRail();
+  document.querySelectorAll("button[data-open]").forEach(b => b.onclick = () => open(b.dataset.open));
+}
+
+/* ===================== glossary / progress ===================== */
+function collectTerms(){
+  const out = [];
+  COURSE.modules.forEach(m => m.lessons.forEach(l => l.blocks.forEach(b => {
+    if(b.t==="term") out.push({en:b.en, ru:b.ru, d:b.d, src:`M${m.num} · ${l.title}`});
+  })));
+  return out.sort((a,b)=>a.en.localeCompare(b.en));
+}
+function viewGlossary(){
+  const terms = collectTerms();
+  return `<h1>Словарь терминов</h1>
+  <p class="lead">${terms.length} термин${plural(terms.length)} из пройденных и будущих модулей. Ищи по английскому названию или по русскому описанию.</p>
+  <input class="glosssearch" id="gsearch" placeholder="Поиск: CPL, атрибуция, match type…" autocomplete="off">
+  <div id="glist">${terms.map(gitem).join("")}</div>`;
+}
+function gitem(t){
+  return `<div class="gitem" data-k="${esc((t.en+" "+t.ru+" "+t.d).toLowerCase())}">
+    <b>${esc(t.en)}</b> <span class="gr">— ${esc(t.ru)}</span><p>${t.d}</p><div class="gsrc">${esc(t.src)}</div></div>`;
+}
+function viewProgress(){
+  const code = btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+  return `<h1>Прогресс и перенос</h1>
+  <p class="lead">Прогресс хранится в этом браузере. Чтобы продолжить на другом компьютере, скопируй код ниже и вставь его там.</p>
+  <h2>Перенести на другой компьютер</h2>
+  <textarea class="codebox" id="expbox" readonly>${esc(code)}</textarea>
+  <div class="row" style="margin:10px 0 24px">
+    <button class="btn sm" id="copycode">Скопировать код</button>
+    <button class="btn ghost sm" id="dlcode">Скачать файлом</button>
+  </div>
+  <h2>Загрузить прогресс</h2>
+  <p>Вставь код, сохранённый на другом компьютере. Текущий прогресс будет заменён.</p>
+  <textarea class="codebox" id="impbox" placeholder="Вставь код сюда"></textarea>
+  <div class="row" style="margin:10px 0 24px"><button class="btn sm" id="impbtn">Загрузить прогресс</button></div>
+  <div class="sep"></div>
+  <h2>Настройки</h2>
+  <div class="row" style="margin-bottom:14px">
+    <span style="font-size:14.5px">Оформление:</span>
+    ${["auto","light","dark"].map(t=>`<button class="btn ghost sm" data-settheme="${t}" style="${S.theme===t?"border-color:var(--accent);color:var(--accent)":""}">${{auto:"Как в системе",light:"Светлое",dark:"Тёмное"}[t]}</button>`).join("")}
+  </div>
+  <div class="row" style="margin-bottom:14px">
+    <span style="font-size:14.5px">Доступ к модулям:</span>
+    <button class="btn ghost sm" id="unlockbtn">${S.unlockAll?"Вернуть последовательный порядок":"Открыть все модули сразу"}</button>
+  </div>
+  <p style="font-size:13.5px;color:var(--ink2)">Последовательный порядок — это то, ради чего курс и сделан: экзамен не пропускается, материал не забывается. Открывай всё, только если нужно что-то быстро посмотреть.</p>
+  <div class="sep"></div>
+  <button class="btn ghost sm" id="resetbtn" style="border-color:var(--no);color:var(--no)">Сбросить весь прогресс</button>`;
+}
+
+/* ===================== binding ===================== */
+function open(href){
+  const p = href.split(":");
+  if(p[0]==="home") return go({name:"home"});
+  if(p[0]==="glossary") return go({name:"glossary"});
+  if(p[0]==="progress") return go({name:"progress"});
+  if(p[0]==="module") return go({name:"module", m:+p[1]});
+  if(p[0]==="lesson") return go({name:"lesson", m:+p[1], l:+p[2]});
+  if(p[0]==="quiz") return startQuiz(+p[1], +p[2], false);
+  if(p[0]==="exam") return startQuiz(+p[1], null, true);
+}
+
+function bind(){
+  document.querySelectorAll("button[data-open]").forEach(b => b.onclick = () => open(b.dataset.open));
+  document.querySelectorAll("button[data-mod]").forEach(b => { if(!b.disabled) b.onclick = () => go({name:"module", m:+b.dataset.mod}); });
+
+  const gs = $("#gsearch");
+  if(gs) gs.oninput = () => {
+    const v = gs.value.trim().toLowerCase();
+    document.querySelectorAll("#glist .gitem").forEach(el => {
+      el.style.display = !v || el.dataset.k.includes(v) ? "" : "none";
+    });
+  };
+  const cc = $("#copycode");
+  if(cc) cc.onclick = async () => {
+    const t = $("#expbox");
+    try{ await navigator.clipboard.writeText(t.value); }
+    catch(e){ t.select(); document.execCommand("copy"); }
+    toast("Код скопирован");
+  };
+  const dl = $("#dlcode");
+  if(dl) dl.onclick = () => {
+    const blob = new Blob([$("#expbox").value], {type:"text/plain"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "ppctrack-progress.txt";
+    a.click(); URL.revokeObjectURL(a.href);
+  };
+  const ib = $("#impbtn");
+  if(ib) ib.onclick = () => {
+    const raw = $("#impbox").value.trim();
+    if(!raw) return toast("Вставь код");
+    try{
+      const o = JSON.parse(decodeURIComponent(escape(atob(raw))));
+      if(!o || typeof o !== "object" || !("lessons" in o)) throw 0;
+      S = Object.assign(blank(), o); save(); render();
+      toast("Прогресс загружен");
+    }catch(e){ toast("Код не читается. Скопируй его целиком."); }
+  };
+  document.querySelectorAll("button[data-settheme]").forEach(b => b.onclick = () => { S.theme = b.dataset.settheme; save(); render(); });
+  const ub = $("#unlockbtn");
+  if(ub) ub.onclick = () => { S.unlockAll = !S.unlockAll; save(); render(); };
+  const rb = $("#resetbtn");
+  if(rb) rb.onclick = () => {
+    if(confirm("Сбросить весь прогресс? Это нельзя отменить.")){ S = blank(); save(); go({name:"home"}); }
+  };
+  document.querySelectorAll("button[data-nav]").forEach(b => b.onclick = () => go({name:b.dataset.nav}));
+}
+
+render();
+</script>
+</body>
+</html>
